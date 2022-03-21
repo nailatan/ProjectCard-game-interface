@@ -107,6 +107,7 @@ const pintarUnJugador = (jugador) => {
   celdaColorJugador.innerText = jugador.getColour();
   celdaColorJugador.style.backgroundColor = celdaColorJugador.innerText;
   celdaColorJugador.style.color = celdaColorJugador.innerText;
+  celdaColorJugador.style.margin = ".4rem";
   filaJugador.appendChild(celdaOrdenJugador);
   filaJugador.appendChild(celdaNombreJugador);
   filaJugador.appendChild(celdaColorJugador);
@@ -129,14 +130,58 @@ const pintarJugadores = () => {
   maximoJugadores();
 };
 
-const pintarMesa = () => {
+const deshabilitarEntradaJugadores = () => {
   let divEntradaJugadores = document.querySelector("#nuevoJugador");
-  let divMesaJuego = document.querySelector("#juego");
-  console.log(divMesaJuego);
   divEntradaJugadores.style.display = "none";
+};
+
+const habilitaMesaJuego = () => {
+  let divMesaJuego = document.querySelector("#juego");
   divMesaJuego.classList.remove("noVisible");
   divMesaJuego.classList.add("FColumn");
-  console.log(divMesaJuego);
+};
+
+const pintarMesaJugador = (jugador) => {
+  let divMesaJugador = document.createElement("div");
+  divMesaJugador.classList.add("mesaJugador", "FColumn");
+
+  let divNombreJugador = document.createElement("div");
+  divNombreJugador.classList.add("FRow", "jCenter");
+
+  let h2NombreJugador = document.createElement("h2");
+  h2NombreJugador.textContent = jugador.getPlayer();
+  h2NombreJugador.setAttribute("style", `color: ${jugador.getColour()}`);
+
+  let divCartasJugador = document.createElement("div");
+  divCartasJugador.classList.add("fColumn", "flexAll");
+
+  let divCartas = document.createElement("div");
+  divCartas.textContent = "CARTAS";
+
+  let divOpciones = document.createElement("div");
+  divOpciones.classList.add("FRow", "jEnd", "flexAll", "aEnd");
+
+  divNombreJugador.appendChild(h2NombreJugador);
+
+  divCartasJugador.appendChild(divCartas);
+  divCartasJugador.appendChild(divOpciones);
+
+  divMesaJugador.appendChild(divNombreJugador);
+  divMesaJugador.appendChild(divCartasJugador);
+
+  return divMesaJugador;
+};
+
+const pintarMesa = () => {
+  deshabilitarEntradaJugadores();
+  habilitaMesaJuego();
+
+  let divJugadores = document.getElementById("jugadores");
+  divJugadores.textContent = "";
+
+  jugadores.map((jugador) =>
+    divJugadores.appendChild(pintarMesaJugador(jugador))
+  );
 };
 
 const jugar = () => {

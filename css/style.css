@@ -94,11 +94,11 @@ td {
   padding: 0.4rem;
 }
 #jugadores {
-  padding: 10rem;
+  padding-top: 5rem;
 }
 .mesaJugador {
   height: var(--height-mesa);
-  width: 30rem;
+  width: 28rem;
   margin: 1rem;
   border: 1px solid white;
   border-radius: var(--border-radius-mesa);
