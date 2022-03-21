@@ -1,8 +1,48 @@
+.noVisible {
+  display: none;
+}
+.allHeight {
+  min-height: 100vh;
+}
+.FRow {
+  display: flex;
+  flex-direction: row;
+}
+.flexAll {
+  flex: 1;
+}
+.FColumn {
+  display: flex;
+  flex-direction: column;
+}
+.aCenter {
+  align-items: center;
+}
+
+.jCenter {
+  justify-content: center;
+}
+
+.jEnd {
+  justify-content: flex-end;
+}
+
+.aEnd {
+  align-items: flex-end;
+}
+
+.jSpaceAround {
+  justify-content: space-around;
+}
+
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
   background-color: #282d3a;
   color: #fff;
+  --color-mesa: #0d857f;
+  --border-radius-mesa: 1rem;
+  --height-mesa: 30vh;
 }
 h1 {
   text-align: center;
@@ -29,6 +69,7 @@ input[type="text"] {
   right: 0;
   margin: 0.4em;
 }
+
 th,
 td {
   padding: 0 0.3rem 0 0;
@@ -42,4 +83,25 @@ td {
   width: 20em;
   height: 10em;
   padding: 1em;
+}
+
+#banca {
+  background-color: var(--color-mesa);
+  height: var(--height-mesa);
+  width: 40rem;
+  border: 1px solid white;
+  border-radius: var(--border-radius-mesa);
+  padding: 0.4rem;
+}
+#jugadores {
+  padding: 10rem;
+}
+.mesaJugador {
+  height: var(--height-mesa);
+  width: 30rem;
+  margin: 1rem;
+  border: 1px solid white;
+  border-radius: var(--border-radius-mesa);
+  background-color: var(--color-mesa);
+  padding: 0.4rem;
 }

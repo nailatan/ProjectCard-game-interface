@@ -129,11 +129,21 @@ const pintarJugadores = () => {
   maximoJugadores();
 };
 
+const pintarMesa = () => {
+  let divEntradaJugadores = document.querySelector("#nuevoJugador");
+  let divMesaJuego = document.querySelector("#juego");
+  console.log(divMesaJuego);
+  divEntradaJugadores.style.display = "none";
+  divMesaJuego.classList.remove("noVisible");
+  divMesaJuego.classList.add("FColumn");
+  console.log(divMesaJuego);
+};
+
 const jugar = () => {
   if (jugadores.length < 1) {
     alert(`Faltan jugadores ${jugadores.length}`);
   } else {
-    alert("Vamos a jugar!!");
+    pintarMesa();
   }
 };
 
