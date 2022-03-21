@@ -7,7 +7,9 @@ let jugadores = [];
 
 // Funciones gestión de creación/Eliminación de jugadores
 const anyadirNuevoJugador = () => {
-  if (nombreVacio()) {
+  if (jugadores.length >= 3) {
+    alert("Se han alcanzado el máximo de jugadores");
+  } else if (nombreVacio()) {
     alert("Falta el nombre del jugador");
   } else if (jugadorDuplicado()) {
     alert("Existe otro jugador con el mismo nombre");
@@ -73,6 +75,16 @@ const crearImagenEliminarJugador = (jugador) => {
   return img;
 };
 
+const generarNuevoColor = () => {
+  let simbolos = "0123456789ABCDEF";
+  let color = "#";
+
+  for (let i = 0; i < 6; i++) {
+    color = color + simbolos[Math.floor(Math.random() * 16)];
+  }
+  return color;
+};
+
 const crearJugador = () => {
   let nombre = document.querySelector("input[name='nombre']");
   let color = document.querySelector("input[name='color']");
@@ -80,6 +92,7 @@ const crearJugador = () => {
   let jugador = new Player(nombre.value, color.value, false);
   jugadores.push(jugador);
   nombre.value = "";
+  color.value = generarNuevoColor();
 };
 
 const pintarUnJugador = (jugador) => {

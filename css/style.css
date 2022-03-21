@@ -11,7 +11,6 @@ table {
   margin-top: 1rem;
   width: inherit;
   border-collapse: collapse;
-  /* border: 1px solid black; */
 }
 form {
   display: flex;
@@ -22,7 +21,7 @@ input[type="text"] {
 #Jugar {
   background-color: #aaa;
   color: #fff;
-  border-radius: 10%;
+  border-radius: 10rem;
   width: fit-content;
   position: absolute;
   padding: 0.5em;
@@ -32,12 +31,11 @@ input[type="text"] {
 }
 th,
 td {
-  /* border: 1px solid black; */
   padding: 0 0.3rem 0 0;
 }
 #nuevoJugador {
   background-color: #3e6259;
-  border-radius: 2%;
+  border-radius: 1rem;
   position: absolute;
   top: 10rem;
   left: 38rem;
