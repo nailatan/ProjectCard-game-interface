@@ -6,7 +6,7 @@ import Player from "./Player/player";
 let jugadores = [];
 
 // Funciones gestión de creación/Eliminación de jugadores
-const anyadirNuevoJugador = () => {
+const onClickAnyadirJugador = () => {
   if (jugadores.length >= 3) {
     alert("Se han alcanzado el máximo de jugadores");
   } else if (nombreVacio()) {
@@ -23,35 +23,17 @@ const anyadirNuevoJugador = () => {
 
 const maximoJugadores = () => {
   let anyadirJugador = document.querySelector("img[src='../images/plus.svg']");
-
-  if (jugadores.length === 3) {
-    anyadirJugador.style.display = "none";
-  } else {
-    anyadirJugador.style.display = "block";
-  }
+  anyadirJugador.style.display = jugadores.length === 3 ? "none" : "block";
 };
 
 const colorDuplicado = () => {
-  let nombre = document.querySelector("input[name='color']");
-  let tablaJugadores = document.querySelector("tbody");
-  for (let i = 0; i < jugadores.length; i++) {
-    if (nombre.value === jugadores[i].getColour()) {
-      return true;
-    }
-  }
-  return false;
+  const colorActual = document.querySelector("input[name='color']").value;
+  return jugadores.some((jugador) => jugador.getColour() === colorActual);
 };
 
 const jugadorDuplicado = () => {
-  let nombre = document.querySelector("input[name='nombre']");
-  let tablaJugadores = document.querySelector("tbody");
-
-  for (let i = 0; i < jugadores.length; i++) {
-    if (nombre.value === jugadores[i].getPlayer()) {
-      return true;
-    }
-  }
-  return false;
+  const nombre = document.querySelector("input[name='nombre']").value;
+  return jugadores.some((jugador) => jugador.getPlayer() === nombre);
 };
 
 const nombreVacio = () => {
@@ -59,18 +41,18 @@ const nombreVacio = () => {
   return nombre.value === "";
 };
 
-const eliminarJugador = (nombreJugador) => {
+const onClickEliminarJugador = (nombreJugador) => {
   jugadores = jugadores.filter(
     (jugador) => jugador.getPlayer() !== nombreJugador
   );
   pintarJugadores();
 };
 
-const crearImagenEliminarJugador = (jugador) => {
+const crearImagenBorrarJugador = (jugador) => {
   let img = document.createElement("img");
   img.setAttribute("src", "./images/delete.svg");
   img.addEventListener("click", function (event) {
-    eliminarJugador(jugador);
+    onClickEliminarJugador(jugador);
   });
   return img;
 };
@@ -100,9 +82,7 @@ const pintarUnJugador = (jugador) => {
   let celdaOrdenJugador = document.createElement("td");
   let celdaNombreJugador = document.createElement("td");
   let celdaColorJugador = document.createElement("td");
-  celdaOrdenJugador.appendChild(
-    crearImagenEliminarJugador(jugador.getPlayer())
-  );
+  celdaOrdenJugador.appendChild(crearImagenBorrarJugador(jugador.getPlayer()));
   celdaNombreJugador.innerText = jugador.getPlayer();
   celdaColorJugador.innerText = jugador.getColour();
   celdaColorJugador.style.backgroundColor = celdaColorJugador.innerText;
@@ -119,7 +99,6 @@ const pintarJugadores = () => {
   let tablaJugadores = document.querySelector("tbody");
 
   const eliminarTodosJugadores = () => {
-    let tablaJugadores = document.querySelector("tbody");
     tablaJugadores.textContent = "";
   };
 
@@ -184,23 +163,28 @@ const pintarMesa = () => {
   );
 };
 
-const jugar = () => {
+const empezarJuego = () => {
+  alert("Empezamos el juego");
+};
+
+const onClickJugar = () => {
   if (jugadores.length < 1) {
     alert(`Faltan jugadores ${jugadores.length}`);
   } else {
     pintarMesa();
+    empezarJuego();
   }
 };
 
 // Tratamiento de eventos
 let anyadirJugador = document.querySelector("img[src='../images/plus.svg']");
-let botonJugar = document.querySelector("#Jugar");
+let botononClickJugar = document.querySelector("#Jugar");
 let formElement = document.querySelector("form");
 
 formElement.addEventListener("submit", (event) => {
   event.preventDefault();
-  anyadirNuevoJugador();
+  onClickAnyadirJugador();
 });
 
-botonJugar.addEventListener("click", jugar);
-anyadirJugador.addEventListener("click", anyadirNuevoJugador);
+botononClickJugar.addEventListener("click", onClickJugar);
+anyadirJugador.addEventListener("click", onClickAnyadirJugador);
