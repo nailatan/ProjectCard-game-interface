@@ -169,6 +169,11 @@ const empezarJuego = () => {
   baraja.inicializateDeck();
   baraja.suffleCards();
   baraja.printDeckWithWorth();
+  console.log("CARTAS DE CADA JUGADOR");
+  jugadores.forEach((jugador) => {
+    console.log(`CARTAS JUGADOR ${jugador.getPlayer()}`);
+    jugador.printHandConsole();
+  });
 };
 
 const onClickJugar = () => {
