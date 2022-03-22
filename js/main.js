@@ -1,9 +1,10 @@
 import "../css/style.css";
 
 import Player from "./Player/player";
-
+import DeckCards from "./DeckCards/DeckCards";
 // MODELO
 let jugadores = [];
+let baraja;
 
 // Funciones gestión de creación/Eliminación de jugadores
 const onClickAnyadirJugador = () => {
@@ -135,11 +136,11 @@ const pintarMesaJugador = (jugador) => {
   divCartasJugador.classList.add("fColumn", "flexAll");
 
   let divCartas = document.createElement("div");
-  divCartas.textContent = "CARTAS";
+  divCartas.innerHTML = '<img src="./Images/Cards/1Bastos.jpg">';
 
   let divOpciones = document.createElement("div");
   divOpciones.classList.add("FRow", "jEnd", "flexAll", "aEnd");
-
+  divOpciones.textContent = "OPCIONES";
   divNombreJugador.appendChild(h2NombreJugador);
 
   divCartasJugador.appendChild(divCartas);
@@ -164,7 +165,10 @@ const pintarMesa = () => {
 };
 
 const empezarJuego = () => {
-  alert("Empezamos el juego");
+  baraja = new DeckCards();
+  baraja.inicializateDeck();
+  baraja.suffleCards();
+  baraja.printDeckWithWorth();
 };
 
 const onClickJugar = () => {
