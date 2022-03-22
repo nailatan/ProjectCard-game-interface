@@ -26,7 +26,7 @@ class Player {
     this._hand.printHandConsole();
   }
   getHand() {
-    return this._hand;
+    return this._hand.getHand();
   }
   addCard(card) {
     this._hand.addCard(card);

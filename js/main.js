@@ -4,6 +4,7 @@ import Player from "./Player/player";
 import DeckCards from "./DeckCards/DeckCards";
 // MODELO
 let jugadores = [];
+let jugadorBanca = new Player("Banca", "#aaaaaa", true);
 let baraja;
 
 // Funciones gestión de creación/Eliminación de jugadores
@@ -124,6 +125,7 @@ const habilitaMesaJuego = () => {
 const pintarMesaJugador = (jugador) => {
   let divMesaJugador = document.createElement("div");
   divMesaJugador.classList.add("mesaJugador", "FColumn");
+  divMesaJugador.id = `jugador_${jugador.getPlayer()}`;
 
   let divNombreJugador = document.createElement("div");
   divNombreJugador.classList.add("FRow", "jCenter");
@@ -136,11 +138,12 @@ const pintarMesaJugador = (jugador) => {
   divCartasJugador.classList.add("fColumn", "flexAll");
 
   let divCartas = document.createElement("div");
-  divCartas.innerHTML = '<img src="./Images/Cards/1Bastos.jpg">';
+  divCartas.id = `cartas_${jugador.getPlayer()}`;
 
   let divOpciones = document.createElement("div");
   divOpciones.classList.add("FRow", "jEnd", "flexAll", "aEnd");
   divOpciones.textContent = "OPCIONES";
+  divOpciones.id = `opciones_${jugador.getPlayer()}`;
   divNombreJugador.appendChild(h2NombreJugador);
 
   divCartasJugador.appendChild(divCartas);
@@ -164,23 +167,35 @@ const pintarMesa = () => {
   );
 };
 
+const repintarMesaJugador = (jugador) => {
+  const divMesa = document.getElementById(`jugador_${jugador.getPlayer()}`);
+  const divCartas = divMesa.querySelector(`#cartas_${jugador.getPlayer()}`);
+
+  for (let carta of jugador.getHand()) {
+    let imagenCarta = document.createElement("img");
+    imagenCarta.src = `./Images/Cards/${carta.getNumber()}${carta.getSuit()}.jpg`;
+    divCartas.appendChild(imagenCarta);
+  }
+};
+
 const empezarJuego = () => {
+  pintarMesa();
   baraja = new DeckCards();
   baraja.inicializateDeck();
   baraja.suffleCards();
-  baraja.printDeckWithWorth();
-  console.log("CARTAS DE CADA JUGADOR");
+
+  //Repartimos una carta a cada jugador
   jugadores.forEach((jugador) => {
-    console.log(`CARTAS JUGADOR ${jugador.getPlayer()}`);
-    jugador.printHandConsole();
+    jugador.addCard(baraja.takeCard());
+    repintarMesaJugador(jugador);
   });
+  jugadorBanca.addCard(baraja.takeCard());
 };
 
 const onClickJugar = () => {
   if (jugadores.length < 1) {
     alert(`Faltan jugadores ${jugadores.length}`);
   } else {
-    pintarMesa();
     empezarJuego();
   }
 };
