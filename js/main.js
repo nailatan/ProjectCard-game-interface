@@ -3,13 +3,9 @@ import "../css/style.css";
 import Player from "./Player/player";
 import DeckCards from "./DeckCards/DeckCards";
 import {
-  pintarUnJugador,
   pintarJugadores,
-  pintarMesaJugador,
   pintarMesa,
   repintarMesaJugador,
-  habilitaMesaJuego,
-  deshabilitarEntradaJugadores,
 } from "./interface/render";
 
 // MODELO
@@ -19,6 +15,7 @@ let baraja;
 
 // Funciones gestión de creación/Eliminación de jugadores
 const onClickAnyadirJugador = () => {
+  console.log(` onClickAnyadirJugador = ${jugadores.length}`);
   if (jugadores.length >= 3) {
     alert("Se han alcanzado el máximo de jugadores");
   } else if (nombreVacio()) {
