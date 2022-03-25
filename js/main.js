@@ -5,6 +5,7 @@ import DeckCards from "./DeckCards/DeckCards";
 import {
   pintarJugadores,
   pintarMesa,
+  repintarMesa,
   repintarMesaJugador,
 } from "./interface/render";
 
@@ -15,7 +16,6 @@ let baraja;
 
 // Funciones gestión de creación/Eliminación de jugadores
 const onClickAnyadirJugador = () => {
-  console.log(` onClickAnyadirJugador = ${jugadores.length}`);
   if (jugadores.length >= 3) {
     alert("Se han alcanzado el máximo de jugadores");
   } else if (nombreVacio()) {
@@ -65,6 +65,44 @@ const crearJugador = () => {
   color.value = generarNuevoColor();
 };
 
+const pasarTurno = () => {
+  jugadores.find((jugador, indice) => {
+    if (jugador.getGameTurn()) {
+      jugador.setGameTurn(false);
+      console.log(`Le quitamos el turno a ${jugador.getPlayer()}`);
+      if (++indice < jugadores.length) {
+        jugadores[indice].setGameTurn(true);
+        console.log(`El turno es para  ${jugadores[indice].getPlayer()}`);
+      }
+      return jugador;
+    }
+  });
+};
+
+const pedirOtraCarta = (jugador) => {
+  console.log(
+    `Puntos de ${jugador.getPlayer()}  son ${jugador.getTotalPoints()}`
+  );
+
+  console.log(`${jugador.getPlayer()} pide Otra carta`);
+  let carta = baraja.takeCard();
+  jugador.addCard(carta);
+
+  console.log(
+    `Puntos de ${jugador.getPlayer()}  son ${jugador.getTotalPoints()}`
+  );
+  if (jugador.getTotalPoints() > 7.5) {
+    pasarTurno();
+    repintarMesa(jugadores, pedirOtraCarta, pasarTurno);
+  } else {
+    repintarMesaJugador(jugador, pedirOtraCarta, plantarse);
+  }
+};
+const plantarse = () => {
+  console.log("ME planto");
+  pasarTurno();
+  repintarMesa(jugadores, pedirOtraCarta, plantarse);
+};
 const empezarJuego = () => {
   pintarMesa(jugadores);
   baraja = new DeckCards();
@@ -72,9 +110,10 @@ const empezarJuego = () => {
   baraja.suffleCards();
 
   //Repartimos una carta a cada jugador
-  jugadores.forEach((jugador) => {
+  jugadores.forEach((jugador, indice) => {
+    jugador.setGameTurn(indice === 0); //El primer jugador tiene el turno
     jugador.addCard(baraja.takeCard());
-    repintarMesaJugador(jugador);
+    repintarMesaJugador(jugador, pedirOtraCarta, plantarse);
   });
   jugadorBanca.addCard(baraja.takeCard());
 };

@@ -63,7 +63,6 @@ const pintarMesaJugador = (jugador) => {
 
   let divOpciones = document.createElement("div");
   divOpciones.classList.add("FRow", "jEnd", "flexAll", "aEnd");
-  divOpciones.textContent = "OPCIONES";
   divOpciones.id = `opciones_${jugador.getPlayer()}`;
   divNombreJugador.appendChild(h2NombreJugador);
 
@@ -88,14 +87,52 @@ export const pintarMesa = (jugadores) => {
   );
 };
 
-export const repintarMesaJugador = (jugador) => {
+export const repintarMesa = (
+  jugadores,
+  functionPedirCarta,
+  functionPlantarse
+) => {
+  jugadores.map((jugador) =>
+    repintarMesaJugador(jugador, functionPedirCarta, functionPlantarse)
+  );
+};
+
+export const repintarMesaJugador = (
+  jugador,
+  functionPedirCarta,
+  functionPlantarse
+) => {
   const divMesa = document.getElementById(`jugador_${jugador.getPlayer()}`);
   const divCartas = divMesa.querySelector(`#cartas_${jugador.getPlayer()}`);
+  divCartas.textContent = "";
 
   for (let carta of jugador.getHand()) {
     let imagenCarta = document.createElement("img");
     imagenCarta.src = `./Images/Cards/${carta.getNumber()}${carta.getSuit()}.jpg`;
     divCartas.appendChild(imagenCarta);
+  }
+  console.log(
+    `Repintando la mesa del jugador ${jugador.getPlayer()}. Tiene turno? ${jugador.getGameTurn()} `
+  );
+  let divOpciones = divMesa.querySelector(`#opciones_${jugador.getPlayer()}`);
+  divOpciones.textContent = "";
+
+  //Activamos acciones de juego si es el turno del jugador
+  if (jugador.getGameTurn()) {
+    let buttonCarta = document.createElement("button");
+    buttonCarta.innerText = "CARTA";
+
+    buttonCarta.addEventListener("click", () => {
+      functionPedirCarta(jugador);
+    });
+    let buttonPlantar = document.createElement("button");
+    buttonPlantar.innerText = "PLANTARSE";
+    buttonPlantar.addEventListener("click", () => {
+      functionPlantarse(jugador);
+    });
+
+    divOpciones.appendChild(buttonCarta);
+    divOpciones.appendChild(buttonPlantar);
   }
 };
 

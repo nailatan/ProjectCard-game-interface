@@ -6,6 +6,7 @@ class Player {
     this._colour = colour;
     this._isTheBank = isTheBank;
     this._hand = new Hand();
+    this._gameTurn = false;
   }
   getPlayer() {
     return this._name;
@@ -30,6 +31,12 @@ class Player {
   }
   addCard(card) {
     this._hand.addCard(card);
+  }
+  getGameTurn() {
+    return this._gameTurn;
+  }
+  setGameTurn(isTurn) {
+    this._gameTurn = isTurn;
   }
 }
 export default Player;
