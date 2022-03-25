@@ -97,7 +97,7 @@ td {
   padding-top: 5rem;
 }
 .mesaJugador {
-  height: var(--height-mesa);
+  min-height: var(--height-mesa);
   width: 28rem;
   margin: 1rem;
   border: 1px solid white;
