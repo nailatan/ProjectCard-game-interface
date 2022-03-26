@@ -7,6 +7,7 @@ import {
   pintarMesa,
   repintarMesa,
   repintarMesaJugador,
+  repintarMesaBanca,
 } from "./interface/render";
 
 // MODELO
@@ -65,14 +66,60 @@ const crearJugador = () => {
   color.value = generarNuevoColor();
 };
 
-const pasarTurno = () => {
+const finalizarJuego = () => {
+  const puntosBanca = jugadorBanca.getTotalPoints();
+
+  jugadores.map((jugador) => {
+    console.log(`BANCA CONTRA ${jugador.getPlayer()}`);
+    if (puntosBanca > 7.5 && jugador.getTotalPoints() <= 7.5) {
+      console.log(
+        `El jugador  ${jugador.getPlayer()} ha ganado. La banca se ha pasado`
+      );
+    } else if (puntosBanca > 7.5 && jugador.getTotalPoints() > 7.5) {
+      console.log(
+        `Ni el jugador ${jugador.getPlayer()} ni la banca ganan. Se han pasado`
+      );
+    } else if (
+      (puntosBanca > jugador.getTotalPoints() && puntosBanca <= 7.5) ||
+      jugador.getTotalPoints() > 7.5
+    ) {
+      console.log(`La banca gana al jugador ${jugador.getPlayer()}`);
+    } else if (
+      jugador.getTotalPoints() > puntosBanca &&
+      jugador.getTotalPoints() <= 7.5
+    ) {
+      console.log(`Gana el jugador ${jugador.getPlayer()}`);
+    } else if (puntosBanca === jugador.getTotalPoints()) {
+      console.log(`El jugador ${jugador.getPlayer()} empata`);
+    }
+  });
+};
+
+const jugadaBanca = () => {
+  while (jugadorBanca.getTotalPoints() < 7.5) {
+    jugadorBanca.addCard(baraja.takeCard());
+    setTimeout(jugadaBanca, 2 * 1000);
+    repintarMesaBanca(jugadorBanca);
+    setTimeout(jugadaBanca, 2 * 1000);
+  }
+};
+
+const pasarTurno = (jugador) => {
+  console.log(`Pasando el turno de ${jugador.getPlayer()}`);
   jugadores.find((jugador, indice) => {
+    let turnoSiguiente;
     if (jugador.getGameTurn()) {
+      console.log(`Quitamos el turno a ${jugador.getPlayer()} `);
       jugador.setGameTurn(false);
-      console.log(`Le quitamos el turno a ${jugador.getPlayer()}`);
       if (++indice < jugadores.length) {
         jugadores[indice].setGameTurn(true);
-        console.log(`El turno es para  ${jugadores[indice].getPlayer()}`);
+        turnoSiguiente = jugadores[indice];
+        console.log(`Le damos el turno a ${turnoSiguiente.getPlayer()}`);
+      } else {
+        console.log(`LE toca jugar a la banca`);
+        jugadaBanca();
+        finalizarJuego();
+        return jugadorBanca;
       }
       return jugador;
     }
@@ -80,31 +127,25 @@ const pasarTurno = () => {
 };
 
 const pedirOtraCarta = (jugador) => {
-  console.log(
-    `Puntos de ${jugador.getPlayer()}  son ${jugador.getTotalPoints()}`
-  );
-
-  console.log(`${jugador.getPlayer()} pide Otra carta`);
   let carta = baraja.takeCard();
   jugador.addCard(carta);
 
-  console.log(
-    `Puntos de ${jugador.getPlayer()}  son ${jugador.getTotalPoints()}`
-  );
   if (jugador.getTotalPoints() > 7.5) {
-    pasarTurno();
-    repintarMesa(jugadores, pedirOtraCarta, pasarTurno);
+    console.log(`${jugador.getPlayer()} se ha pasado`);
+    pasarTurno(jugador);
+    repintarMesa(jugadores, pedirOtraCarta, plantarse);
   } else {
     repintarMesaJugador(jugador, pedirOtraCarta, plantarse);
   }
 };
-const plantarse = () => {
-  console.log("ME planto");
-  pasarTurno();
+const plantarse = (jugador) => {
+  jugador.setStopGame(true);
+  pasarTurno(jugador);
+  console.log(`EL jugador ${jugador.getPlayer()} se ha plantado`);
   repintarMesa(jugadores, pedirOtraCarta, plantarse);
 };
 const empezarJuego = () => {
-  pintarMesa(jugadores);
+  pintarMesa(jugadores, jugadorBanca);
   baraja = new DeckCards();
   baraja.inicializateDeck();
   baraja.suffleCards();
@@ -116,6 +157,7 @@ const empezarJuego = () => {
     repintarMesaJugador(jugador, pedirOtraCarta, plantarse);
   });
   jugadorBanca.addCard(baraja.takeCard());
+  repintarMesaBanca(jugadorBanca);
 };
 
 const onClickJugar = () => {

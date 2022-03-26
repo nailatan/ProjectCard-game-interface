@@ -7,6 +7,7 @@ class Player {
     this._isTheBank = isTheBank;
     this._hand = new Hand();
     this._gameTurn = false;
+    this._stopGame = false;
   }
   getPlayer() {
     return this._name;
@@ -37,6 +38,12 @@ class Player {
   }
   setGameTurn(isTurn) {
     this._gameTurn = isTurn;
+  }
+  getStopGame() {
+    return this._stopGame;
+  }
+  setStopGame(stop) {
+    this._stopGame = stop;
   }
 }
 export default Player;
