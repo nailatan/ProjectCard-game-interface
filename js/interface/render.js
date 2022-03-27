@@ -1,4 +1,5 @@
 import Player from "../Player/player";
+import { resultado } from "../Juego/juego";
 
 export const pintarJugadores = (jugadores) => {
   let tablaJugadores = document.querySelector("tbody");
@@ -122,6 +123,7 @@ export const pintarMesa = (jugadores, banca) => {
   jugadores.map((jugador) =>
     divJugadores.appendChild(pintarMesaJugador(jugador))
   );
+  divBanca.textContent = "";
   divBanca.appendChild(pintarMesaBanca(banca));
 };
 
@@ -147,6 +149,11 @@ export const repintarMesaBanca = (banca) => {
   }
   let divOpciones = divMesa.querySelector("#opciones_banca");
   divOpciones.textContent = "";
+
+  let divSeguimiento = document.getElementById("seguimiento");
+  if (banca.getGameTurn()) {
+    divSeguimiento.textContent = `Turno de la ${banca.getPlayer()}. Llevas ${banca.getTotalPoints()} puntos.`;
+  }
 };
 export const repintarMesaJugador = (
   jugador,
@@ -168,6 +175,8 @@ export const repintarMesaJugador = (
 
   //Activamos acciones de juego si es el turno del jugador
   if (jugador.getGameTurn()) {
+    let divSeguimiento = document.getElementById("seguimiento");
+    divSeguimiento.textContent = `Turno de ${jugador.getPlayer()}. Llevas ${jugador.getTotalPoints()} puntos.`;
     let buttonCarta = document.createElement("button");
     buttonCarta.innerText = "Carta";
 
@@ -196,12 +205,30 @@ export const repintarMesaJugador = (
 const deshabilitarEntradaJugadores = () => {
   let divEntradaJugadores = document.querySelector("#nuevoJugador");
   divEntradaJugadores.style.display = "none";
+  let tablaJugadores = document.querySelector("tbody");
+  tablaJugadores.textContent = "";
 };
 
 const habilitaMesaJuego = () => {
   let divMesaJuego = document.querySelector("#juego");
   divMesaJuego.classList.remove("noVisible");
   divMesaJuego.classList.add("FColumn");
+};
+
+export const activarEntradaJugadores = () => {
+  deshabilitaMesaJuego();
+  habilitarEntradaJugadores();
+};
+
+const habilitarEntradaJugadores = () => {
+  let divEntradaJugadores = document.querySelector("#nuevoJugador");
+  divEntradaJugadores.style.display = "block";
+};
+
+const deshabilitaMesaJuego = () => {
+  let divMesaJuego = document.querySelector("#juego");
+  divMesaJuego.classList.remove("FColumn");
+  divMesaJuego.classList.add("noVisible");
 };
 
 const maximoJugadores = (jugadores) => {
@@ -217,4 +244,35 @@ const onClickEliminarJugador = (nombreJugador, jugadores) => {
   );
   jugadores.splice(0, jugadores.length, ...jugadores2);
   pintarJugadores(jugadores);
+};
+
+const traducirResultado = (resultado) => {
+  let texto = "";
+  switch (resultado) {
+    case "G":
+      texto = "Has ganado!!!";
+      break;
+    case "P":
+      texto = "Has perdido";
+      break;
+    case "E":
+      texto = "Has empatado";
+      break;
+    default:
+      "Ni idea";
+  }
+  return texto;
+};
+
+export const pintarResultados = (resultados) => {
+  resultados.map((resultado) => {
+    let divOpciones = document.getElementById(`opciones_${resultado.jugador}`);
+    divOpciones.style.color = resultado.resultado === "G" ? "blue" : "red";
+    divOpciones.style.fontSize = "2rem";
+    divOpciones.textContent = "";
+    divOpciones.textContent = traducirResultado(resultado.resultado);
+  });
+
+  let divSeguimiento = document.getElementById("seguimiento");
+  divSeguimiento.textContent = "";
 };

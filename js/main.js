@@ -8,11 +8,14 @@ import {
   repintarMesa,
   repintarMesaJugador,
   repintarMesaBanca,
+  pintarResultados,
+  activarEntradaJugadores,
 } from "./interface/render";
+import { resultado, compararResultados } from "./Juego/juego";
 
 // MODELO
 let jugadores = [];
-let jugadorBanca = new Player("Banca", "#aaaaaa", true);
+let jugadorBanca = new Player("Banca", "#000000", true);
 let baraja;
 
 // Funciones gestión de creación/Eliminación de jugadores
@@ -67,56 +70,31 @@ const crearJugador = () => {
 };
 
 const finalizarJuego = () => {
-  const puntosBanca = jugadorBanca.getTotalPoints();
-
-  jugadores.map((jugador) => {
-    console.log(`BANCA CONTRA ${jugador.getPlayer()}`);
-    if (puntosBanca > 7.5 && jugador.getTotalPoints() <= 7.5) {
-      console.log(
-        `El jugador  ${jugador.getPlayer()} ha ganado. La banca se ha pasado`
-      );
-    } else if (puntosBanca > 7.5 && jugador.getTotalPoints() > 7.5) {
-      console.log(
-        `Ni el jugador ${jugador.getPlayer()} ni la banca ganan. Se han pasado`
-      );
-    } else if (
-      (puntosBanca > jugador.getTotalPoints() && puntosBanca <= 7.5) ||
-      jugador.getTotalPoints() > 7.5
-    ) {
-      console.log(`La banca gana al jugador ${jugador.getPlayer()}`);
-    } else if (
-      jugador.getTotalPoints() > puntosBanca &&
-      jugador.getTotalPoints() <= 7.5
-    ) {
-      console.log(`Gana el jugador ${jugador.getPlayer()}`);
-    } else if (puntosBanca === jugador.getTotalPoints()) {
-      console.log(`El jugador ${jugador.getPlayer()} empata`);
-    }
-  });
+  let resultados = compararResultados(jugadores, jugadorBanca);
+  pintarResultados(resultados);
 };
 
 const jugadaBanca = () => {
+  jugadorBanca.setGameTurn(true);
   while (jugadorBanca.getTotalPoints() < 7.5) {
     jugadorBanca.addCard(baraja.takeCard());
     setTimeout(jugadaBanca, 2 * 1000);
     repintarMesaBanca(jugadorBanca);
     setTimeout(jugadaBanca, 2 * 1000);
   }
+  jugadorBanca.setGameTurn(false);
 };
 
 const pasarTurno = (jugador) => {
-  console.log(`Pasando el turno de ${jugador.getPlayer()}`);
   jugadores.find((jugador, indice) => {
     let turnoSiguiente;
     if (jugador.getGameTurn()) {
-      console.log(`Quitamos el turno a ${jugador.getPlayer()} `);
       jugador.setGameTurn(false);
       if (++indice < jugadores.length) {
         jugadores[indice].setGameTurn(true);
         turnoSiguiente = jugadores[indice];
-        console.log(`Le damos el turno a ${turnoSiguiente.getPlayer()}`);
+        repintarMesa(jugadores, pedirOtraCarta, plantarse);
       } else {
-        console.log(`LE toca jugar a la banca`);
         jugadaBanca();
         finalizarJuego();
         return jugadorBanca;
@@ -131,9 +109,8 @@ const pedirOtraCarta = (jugador) => {
   jugador.addCard(carta);
 
   if (jugador.getTotalPoints() > 7.5) {
-    console.log(`${jugador.getPlayer()} se ha pasado`);
     pasarTurno(jugador);
-    repintarMesa(jugadores, pedirOtraCarta, plantarse);
+    // repintarMesa(jugadores, pedirOtraCarta, plantarse);
   } else {
     repintarMesaJugador(jugador, pedirOtraCarta, plantarse);
   }
@@ -141,8 +118,7 @@ const pedirOtraCarta = (jugador) => {
 const plantarse = (jugador) => {
   jugador.setStopGame(true);
   pasarTurno(jugador);
-  console.log(`EL jugador ${jugador.getPlayer()} se ha plantado`);
-  repintarMesa(jugadores, pedirOtraCarta, plantarse);
+  // repintarMesa(jugadores, pedirOtraCarta, plantarse);
 };
 const empezarJuego = () => {
   pintarMesa(jugadores, jugadorBanca);
@@ -168,10 +144,25 @@ const onClickJugar = () => {
   }
 };
 
+const onClickReiniciar = () => {
+  jugadores.map((jugador) => {
+    jugador.vaciarMano();
+  });
+  jugadorBanca.vaciarMano();
+  empezarJuego();
+};
+const onClickNuevoJuego = () => {
+  jugadores = [];
+  jugadorBanca.vaciarMano();
+  activarEntradaJugadores();
+};
+
 // Tratamiento de eventos
 let anyadirJugador = document.querySelector("img[src='../images/plus.svg']");
 let botononClickJugar = document.querySelector("#Jugar");
 let formElement = document.querySelector("form");
+let botonReiniciar = document.querySelector("#reiniciar");
+let botonNuevoJuego = document.querySelector("#nuevoJuego");
 
 formElement.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -180,3 +171,5 @@ formElement.addEventListener("submit", (event) => {
 
 botononClickJugar.addEventListener("click", onClickJugar);
 anyadirJugador.addEventListener("click", onClickAnyadirJugador);
+botonReiniciar.addEventListener("click", onClickReiniciar);
+botonNuevoJuego.addEventListener("click", onClickNuevoJuego);

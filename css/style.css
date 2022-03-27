@@ -42,6 +42,23 @@
   justify-content: space-around;
 }
 
+header {
+  display: flex;
+  flex-direction: row;
+}
+header div {
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  flex: 0.4;
+}
+
+header h1 {
+  text-align: right;
+  flex: 0.6;
+}
+
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
@@ -49,10 +66,7 @@ body {
   color: #fff;
   --color-mesa: #0d857f;
   --border-radius-mesa: 1rem;
-  --height-mesa: 30vh;
-}
-h1 {
-  text-align: center;
+  --height-mesa: 35vh;
 }
 table {
   margin-top: 1rem;
@@ -101,7 +115,7 @@ td {
   padding: 0.4rem;
 }
 #jugadores {
-  padding-top: 5rem;
+  padding-top: 2rem;
 }
 .mesaJugador {
   min-height: var(--height-mesa);
@@ -127,4 +141,8 @@ button {
   background: transparent;
   border: 2px solid #282d3a;
   margin-right: 0.4rem;
+}
+
+#seguimiento {
+  margin-top: 0.9rem;
 }

@@ -45,5 +45,8 @@ class Player {
   setStopGame(stop) {
     this._stopGame = stop;
   }
+  vaciarMano() {
+    this._hand = new Hand();
+  }
 }
 export default Player;
