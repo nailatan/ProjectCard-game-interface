@@ -53,6 +53,15 @@ header div {
   justify-content: right;
   flex: 0.4;
 }
+header button {
+  margin-top: 1rem;
+  margin-right: 1rem;
+  border: 2px solid #fff;
+  background-color: transparent;
+  color: #fff;
+  border-radius: var(--border-radius-mesa);
+  height: 2rem;
+}
 
 header h1 {
   text-align: right;
@@ -135,7 +144,7 @@ img[src^="./Images/Cards/"] {
   padding: 0.3rem;
 }
 
-button {
+main button {
   border-radius: 6px;
   color: #fff;
   background: transparent;

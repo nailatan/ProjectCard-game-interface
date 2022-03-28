@@ -191,13 +191,13 @@ export const repintarMesaJugador = (
 
     divOpciones.appendChild(buttonCarta);
     divOpciones.appendChild(buttonPlantar);
-  } else if (jugador.getStopGame()) {
-    let divResultado = document.createElement("div");
-    divResultado.textContent = "Te has plantado";
-    divOpciones.appendChild(divResultado);
   } else if (!jugador.getStopGame() && jugador.getTotalPoints() > 7.5) {
     let divResultado = document.createElement("div");
     divResultado.textContent = "Te has pasado";
+    divOpciones.appendChild(divResultado);
+  } else if (jugador.getStopGame()) {
+    let divResultado = document.createElement("div");
+    divResultado.textContent = "Te has plantado";
     divOpciones.appendChild(divResultado);
   }
 };

@@ -76,13 +76,17 @@ const finalizarJuego = () => {
 
 const jugadaBanca = () => {
   jugadorBanca.setGameTurn(true);
-  while (jugadorBanca.getTotalPoints() < 7.5) {
-    jugadorBanca.addCard(baraja.takeCard());
-    setTimeout(jugadaBanca, 2 * 1000);
-    repintarMesaBanca(jugadorBanca);
-    setTimeout(jugadaBanca, 2 * 1000);
-  }
+  jugadorBanca.addCard(baraja.takeCard());
+  repintarMesaBanca(jugadorBanca);
   jugadorBanca.setGameTurn(false);
+  if (
+    jugadorBanca.getTotalPoints() < 7.5 &&
+    7.5 - jugadorBanca.getTotalPoints() > 0.5
+  ) {
+    setTimeout(jugadaBanca, 2 * 1000);
+  } else {
+    finalizarJuego();
+  }
 };
 
 const pasarTurno = (jugador) => {
@@ -96,7 +100,6 @@ const pasarTurno = (jugador) => {
         repintarMesa(jugadores, pedirOtraCarta, plantarse);
       } else {
         jugadaBanca();
-        finalizarJuego();
         return jugadorBanca;
       }
       return jugador;
