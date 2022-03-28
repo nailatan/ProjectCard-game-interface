@@ -15,7 +15,8 @@ import { resultado, compararResultados } from "./Juego/juego";
 
 // MODELO
 let jugadores = [];
-let jugadorBanca = new Player("Banca", "#000000", true);
+const colorBanca = "#000000";
+let jugadorBanca = new Player("Banca", colorBanca, true);
 let baraja;
 
 // Funciones gestión de creación/Eliminación de jugadores
