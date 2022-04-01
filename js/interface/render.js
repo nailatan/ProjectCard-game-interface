@@ -318,7 +318,6 @@ export const pintarResultados = (resultados, jugadorBanca) => {
   let divopcionesBanca = document.getElementById(
     `opciones_${jugadorBanca.getPlayer()}`
   );
-  console.log(divopcionesBanca);
   divopcionesBanca.textContent = "";
 
   let divSeguimiento = document.getElementById("seguimiento");

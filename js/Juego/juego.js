@@ -94,3 +94,14 @@ export const prepararBaraja = () => {
 export const hayJugadores = () => {
   return jugadores.length > 1;
 };
+
+export const sigueJugandoBanca = () => {
+  let sigoJugando = false;
+  if (
+    jugadorBanca.getTotalPoints() < 7.5 &&
+    7.5 - jugadorBanca.getTotalPoints() > 0.5
+  ) {
+    sigoJugando = true;
+  }
+  return sigoJugando;
+};

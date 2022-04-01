@@ -17,6 +17,7 @@ import {
   prepararBaraja,
   recogerCartas,
   hayJugadores,
+  sigueJugandoBanca,
 } from "./Juego/juego";
 import { validarNuevoJugador, crearJugador } from "./Juego/gestionJugadores";
 
@@ -37,15 +38,12 @@ const jugadaBanca = () => {
     jugadorBanca.addCard(baraja.takeCard());
     repintarMesaBanca(jugadorBanca, pedirOtraCartaBanca, plantarseBanca);
     jugadorBanca.setGameTurn(false);
-    if (
-      jugadorBanca.getTotalPoints() < 7.5 &&
-      7.5 - jugadorBanca.getTotalPoints() > 0.5
-    ) {
+    if (sigueJugandoBanca()) {
       setTimeout(jugadaBanca, 2 * 1000);
     } else {
       repintarMesaBanca(jugadorBanca, pedirOtraCartaBanca, plantarseBanca);
       let resultados = finalizarJuego();
-      pintarResultados(resultados);
+      pintarResultados(resultados, jugadorBanca);
     }
   } else {
     jugadorBanca.setGameTurn(true);
