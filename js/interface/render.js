@@ -62,7 +62,7 @@ const revisarCheckBanca = (jugadores) => {
 const pintarMesaBanca = (jugador) => {
   let divMesaJugador = document.createElement("div");
   divMesaJugador.classList.add("mesaBanca", "FColumn");
-  divMesaJugador.id = `jugador_banca`;
+  divMesaJugador.id = `jugador_${jugador.getPlayer()}`;
 
   let divNombreJugador = document.createElement("div");
   divNombreJugador.classList.add("FRow", "jCenter");
@@ -75,11 +75,11 @@ const pintarMesaBanca = (jugador) => {
   divCartasJugador.classList.add("fColumn", "flexAll");
 
   let divCartas = document.createElement("div");
-  divCartas.id = `cartas_banca`;
+  divCartas.id = `cartas_${jugador.getPlayer()}`;
 
   let divOpciones = document.createElement("div");
   divOpciones.classList.add("FRow", "jStart", "opciones");
-  divOpciones.id = `opciones_banca`;
+  divOpciones.id = `opciones_${jugador.getPlayer()}`;
   divNombreJugador.appendChild(h2NombreJugador);
 
   divCartasJugador.appendChild(divOpciones);
@@ -157,8 +157,8 @@ export const repintarMesaBanca = (
   functionPedirCarta,
   functionPlantarse
 ) => {
-  const divMesa = document.getElementById("jugador_banca");
-  const divCartas = divMesa.querySelector(`#cartas_banca`);
+  const divMesa = document.getElementById(`jugador_${banca.getPlayer()}`);
+  const divCartas = divMesa.querySelector(`#cartas_${banca.getPlayer()}`);
   divCartas.textContent = "";
 
   for (let carta of banca.getHand()) {
@@ -166,7 +166,7 @@ export const repintarMesaBanca = (
     imagenCarta.src = `./Images/Cards/${carta.getNumber()}${carta.getSuit()}.jpg`;
     divCartas.appendChild(imagenCarta);
   }
-  let divOpciones = divMesa.querySelector("#opciones_banca");
+  let divOpciones = divMesa.querySelector(`#opciones_${banca.getPlayer()}`);
   divOpciones.textContent = "";
 
   if (!banca.isBoot() && banca.getGameTurn()) {
@@ -256,8 +256,10 @@ export const activarEntradaJugadores = () => {
   deshabilitaMesaJuego();
   habilitarEntradaJugadores();
   let checkBanca = document.querySelector("input[name='banca']");
+  let jugador = document.querySelector("input[name='nombre']");
   checkBanca.checked = false;
   checkBanca.disabled = false;
+  jugador.value = "";
 };
 
 const habilitarEntradaJugadores = () => {
@@ -316,6 +318,7 @@ export const pintarResultados = (resultados, jugadorBanca) => {
   let divopcionesBanca = document.getElementById(
     `opciones_${jugadorBanca.getPlayer()}`
   );
+  console.log(divopcionesBanca);
   divopcionesBanca.textContent = "";
 
   let divSeguimiento = document.getElementById("seguimiento");

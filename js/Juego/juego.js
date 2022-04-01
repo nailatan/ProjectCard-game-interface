@@ -34,3 +34,16 @@ export const compararResultados = (jugadores, jugadorBanca) => {
   });
   return resultados;
 };
+
+export const existeJugadorBanca = (jugadores) => {
+  return jugadores.some((jugador) => jugador.isTheBank() === true);
+};
+
+export const validarInicioJuego = (jugadores) => {
+  if (existeJugadorBanca(jugadores) && jugadores.length < 2) {
+    return "Falta al menos un jugador";
+  } else if (!existeJugadorBanca(jugadores) && jugadores.length < 1) {
+    return "Falta";
+  }
+  return "";
+};

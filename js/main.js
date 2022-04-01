@@ -11,17 +11,22 @@ import {
   pintarResultados,
   activarEntradaJugadores,
 } from "./interface/render";
-import { resultado, compararResultados } from "./Juego/juego";
+import {
+  resultado,
+  compararResultados,
+  validarInicioJuego,
+  existeJugadorBanca,
+} from "./Juego/juego";
 
 // MODELO
 let jugadores = [];
 const colorBanca = "#000000";
-let jugadorBanca = new Player("Banca", colorBanca, true);
+let jugadorBanca = new Player("Banca", colorBanca, true, true);
 let baraja;
 
 // Funciones gestión de creación/Eliminación de jugadores
 const onClickAnyadirJugador = () => {
-  if (jugadores.length >= 3) {
+  if (jugadores.length >= 4) {
     alert("Se han alcanzado el máximo de jugadores");
   } else if (nombreVacio()) {
     alert("Falta el nombre del jugador");
@@ -63,30 +68,38 @@ const generarNuevoColor = () => {
 const crearJugador = () => {
   let nombre = document.querySelector("input[name='nombre']");
   let color = document.querySelector("input[name='color']");
+  let isBanca = document.querySelector("input[name='banca']");
 
-  let jugador = new Player(nombre.value, color.value, false);
+  let jugador = new Player(nombre.value, color.value, isBanca.checked, false);
   jugadores.push(jugador);
   nombre.value = "";
+  isBanca.checked = false;
   color.value = generarNuevoColor();
 };
 
 const finalizarJuego = () => {
   let resultados = compararResultados(jugadores, jugadorBanca);
-  pintarResultados(resultados);
+  pintarResultados(resultados, jugadorBanca);
 };
 
 const jugadaBanca = () => {
-  jugadorBanca.setGameTurn(true);
-  jugadorBanca.addCard(baraja.takeCard());
-  repintarMesaBanca(jugadorBanca);
-  jugadorBanca.setGameTurn(false);
-  if (
-    jugadorBanca.getTotalPoints() < 7.5 &&
-    7.5 - jugadorBanca.getTotalPoints() > 0.5
-  ) {
-    setTimeout(jugadaBanca, 2 * 1000);
+  if (jugadorBanca.isBoot()) {
+    jugadorBanca.setGameTurn(true);
+    jugadorBanca.addCard(baraja.takeCard());
+    repintarMesaBanca(jugadorBanca, pedirOtraCartaBanca, plantarseBanca);
+    jugadorBanca.setGameTurn(false);
+    if (
+      jugadorBanca.getTotalPoints() < 7.5 &&
+      7.5 - jugadorBanca.getTotalPoints() > 0.5
+    ) {
+      setTimeout(jugadaBanca, 2 * 1000);
+    } else {
+      repintarMesaBanca(jugadorBanca, pedirOtraCartaBanca, plantarseBanca);
+      finalizarJuego();
+    }
   } else {
-    finalizarJuego();
+    jugadorBanca.setGameTurn(true);
+    repintarMesaBanca(jugadorBanca, pedirOtraCartaBanca, plantarseBanca);
   }
 };
 
@@ -100,6 +113,7 @@ const pasarTurno = (jugador) => {
         turnoSiguiente = jugadores[indice];
         repintarMesa(jugadores, pedirOtraCarta, plantarse);
       } else {
+        repintarMesa(jugadores, pedirOtraCarta, plantarse);
         jugadaBanca();
         return jugadorBanca;
       }
@@ -108,23 +122,50 @@ const pasarTurno = (jugador) => {
   });
 };
 
+const pedirOtraCartaBanca = (banca) => {
+  let carta = baraja.takeCard();
+  banca.addCard(carta);
+  repintarMesaBanca(banca, pedirOtraCartaBanca, plantarseBanca);
+
+  if (banca.getTotalPoints() >= 7.5) {
+    banca.setStopGame(true);
+    finalizarJuego();
+  }
+};
+
+const plantarseBanca = (banca) => {
+  banca.setStopGame(true);
+  finalizarJuego();
+};
+
 const pedirOtraCarta = (jugador) => {
   let carta = baraja.takeCard();
   jugador.addCard(carta);
 
   if (jugador.getTotalPoints() > 7.5) {
     pasarTurno(jugador);
-    // repintarMesa(jugadores, pedirOtraCarta, plantarse);
   } else {
     repintarMesaJugador(jugador, pedirOtraCarta, plantarse);
   }
 };
+
 const plantarse = (jugador) => {
   jugador.setStopGame(true);
   pasarTurno(jugador);
-  // repintarMesa(jugadores, pedirOtraCarta, plantarse);
 };
-const empezarJuego = () => {
+
+const empezarJuego = (reiniciar = false) => {
+  if (!reiniciar) {
+    if (existeJugadorBanca(jugadores)) {
+      jugadorBanca = jugadores.find((jugador) => jugador.isTheBank());
+      let jugadores2 = jugadores.filter(
+        (jugador) => jugador.isTheBank() === false
+      );
+      jugadores.splice(0, jugadores.length, ...jugadores2);
+    } else {
+      jugadorBanca = new Player("Banca", colorBanca, true, true);
+    }
+  }
   pintarMesa(jugadores, jugadorBanca);
   baraja = new DeckCards();
   baraja.inicializateDeck();
@@ -137,12 +178,15 @@ const empezarJuego = () => {
     repintarMesaJugador(jugador, pedirOtraCarta, plantarse);
   });
   jugadorBanca.addCard(baraja.takeCard());
-  repintarMesaBanca(jugadorBanca);
+  repintarMesaBanca(jugadorBanca, pedirOtraCartaBanca, plantarseBanca);
 };
 
 const onClickJugar = () => {
+  let msg = "";
   if (jugadores.length < 1) {
     alert(`Faltan jugadores ${jugadores.length}`);
+  } else if ((msg = validarInicioJuego(jugadores)) != "") {
+    alert(`${msg}`);
   } else {
     empezarJuego();
   }
@@ -153,12 +197,13 @@ const onClickReiniciar = () => {
     jugador.vaciarMano();
   });
   jugadorBanca.vaciarMano();
-  empezarJuego();
+  empezarJuego(true);
 };
 const onClickNuevoJuego = () => {
   jugadores = [];
-  jugadorBanca.vaciarMano();
+  jugadorBanca = new Player("Banca", colorBanca, true, true);
   activarEntradaJugadores();
+  pintarJugadores(jugadores);
 };
 
 // Tratamiento de eventos
