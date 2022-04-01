@@ -9,6 +9,7 @@ export const pintarJugadores = (jugadores) => {
     let celdaOrdenJugador = document.createElement("td");
     let celdaNombreJugador = document.createElement("td");
     let celdaColorJugador = document.createElement("td");
+    let celdaBancaJugador = document.createElement("td");
     celdaOrdenJugador.appendChild(
       crearImagenBorrarJugador(jugador.getPlayer())
     );
@@ -17,9 +18,11 @@ export const pintarJugadores = (jugadores) => {
     celdaColorJugador.style.backgroundColor = celdaColorJugador.innerText;
     celdaColorJugador.style.color = celdaColorJugador.innerText;
     celdaColorJugador.style.margin = ".4rem";
+    celdaBancaJugador.innerText = jugador.isTheBank() ? "SI" : "";
     filaJugador.appendChild(celdaOrdenJugador);
     filaJugador.appendChild(celdaNombreJugador);
     filaJugador.appendChild(celdaColorJugador);
+    filaJugador.appendChild(celdaBancaJugador);
 
     return filaJugador;
   };
@@ -42,6 +45,18 @@ export const pintarJugadores = (jugadores) => {
     tablaJugadores.appendChild(pintarUnJugador(jugador));
   });
   maximoJugadores(jugadores);
+  revisarCheckBanca(jugadores);
+};
+
+const existeJugadorBanca = (jugadores) => {
+  return jugadores.some((jugador) => jugador.isTheBank() === true);
+};
+
+const revisarCheckBanca = (jugadores) => {
+  let checkBanca = document.querySelector("input[name='banca']");
+  let hayJugadorBanca = existeJugadorBanca(jugadores);
+  if (!hayJugadorBanca && jugadores.length === 3) checkBanca.checked = true; //Obligamos a que si introducimos un cuarto jugador sea la banca
+  checkBanca.disabled = hayJugadorBanca;
 };
 
 const pintarMesaBanca = (jugador) => {
@@ -137,7 +152,11 @@ export const repintarMesa = (
   );
 };
 
-export const repintarMesaBanca = (banca) => {
+export const repintarMesaBanca = (
+  banca,
+  functionPedirCarta,
+  functionPlantarse
+) => {
   const divMesa = document.getElementById("jugador_banca");
   const divCartas = divMesa.querySelector(`#cartas_banca`);
   divCartas.textContent = "";
@@ -149,6 +168,24 @@ export const repintarMesaBanca = (banca) => {
   }
   let divOpciones = divMesa.querySelector("#opciones_banca");
   divOpciones.textContent = "";
+
+  if (!banca.isBoot() && banca.getGameTurn()) {
+    //Banca NO automatica
+    let buttonCarta = document.createElement("button");
+    buttonCarta.innerText = "Carta";
+
+    buttonCarta.addEventListener("click", () => {
+      functionPedirCarta(banca);
+    });
+    let buttonPlantar = document.createElement("button");
+    buttonPlantar.innerText = "Me planto";
+    buttonPlantar.addEventListener("click", () => {
+      functionPlantarse(banca);
+    });
+
+    divOpciones.appendChild(buttonCarta);
+    divOpciones.appendChild(buttonPlantar);
+  }
 
   let divSeguimiento = document.getElementById("seguimiento");
   if (banca.getGameTurn()) {
@@ -218,6 +255,9 @@ const habilitaMesaJuego = () => {
 export const activarEntradaJugadores = () => {
   deshabilitaMesaJuego();
   habilitarEntradaJugadores();
+  let checkBanca = document.querySelector("input[name='banca']");
+  checkBanca.checked = false;
+  checkBanca.disabled = false;
 };
 
 const habilitarEntradaJugadores = () => {
@@ -233,7 +273,7 @@ const deshabilitaMesaJuego = () => {
 
 const maximoJugadores = (jugadores) => {
   let anyadirJugador = document.querySelector("img[src='../images/plus.svg']");
-  anyadirJugador.style.display = jugadores.length === 3 ? "none" : "block";
+  anyadirJugador.style.display = jugadores.length === 4 ? "none" : "block";
 };
 
 const onClickEliminarJugador = (nombreJugador, jugadores) => {
@@ -264,7 +304,7 @@ const traducirResultado = (resultado) => {
   return texto;
 };
 
-export const pintarResultados = (resultados) => {
+export const pintarResultados = (resultados, jugadorBanca) => {
   resultados.map((resultado) => {
     let divOpciones = document.getElementById(`opciones_${resultado.jugador}`);
     divOpciones.style.color = resultado.resultado === "G" ? "blue" : "red";
@@ -272,6 +312,11 @@ export const pintarResultados = (resultados) => {
     divOpciones.textContent = "";
     divOpciones.textContent = traducirResultado(resultado.resultado);
   });
+
+  let divopcionesBanca = document.getElementById(
+    `opciones_${jugadorBanca.getPlayer()}`
+  );
+  divopcionesBanca.textContent = "";
 
   let divSeguimiento = document.getElementById("seguimiento");
   divSeguimiento.textContent = "";

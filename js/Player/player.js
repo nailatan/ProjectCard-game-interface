@@ -1,13 +1,14 @@
 import Hand from "../HandsCard/Hand";
 
 class Player {
-  constructor(name, colour, isTheBank) {
+  constructor(name, colour, isTheBank, isBoot) {
     this._name = name;
     this._colour = colour;
     this._isTheBank = isTheBank;
     this._hand = new Hand();
     this._gameTurn = false;
     this._stopGame = false;
+    this._isBoot = isBoot;
   }
   getPlayer() {
     return this._name;
@@ -47,6 +48,12 @@ class Player {
   }
   vaciarMano() {
     this._hand = new Hand();
+  }
+  setIsBoot(isBoot) {
+    this._isBoot = isBoot;
+  }
+  isBoot() {
+    return this._isBoot;
   }
 }
 export default Player;

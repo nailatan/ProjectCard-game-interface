@@ -86,8 +86,9 @@ form {
   display: flex;
 }
 input[type="text"] {
-  width: 97%;
+  width: 67%;
 }
+
 #Jugar {
   background-color: #aaa;
   color: #fff;
@@ -104,17 +105,28 @@ th,
 td {
   padding: 0 0.3rem 0 0;
 }
+
+tbody td:last-child {
+  text-align: center;
+}
 #nuevoJugador {
   background-color: #3e6259;
   border-radius: 1rem;
   position: absolute;
   top: 10rem;
-  left: 38rem;
-  width: 20em;
-  height: 10em;
-  padding: 1em;
+  left: 33rem;
+  width: 30rem;
+  height: 15rem;
+  padding: 1rem;
 }
 
+#nuevoJugador label {
+  display: inline-flex;
+  /* text-align: center; */
+  align-items: center;
+  margin-left: 0.3rem;
+  margin-right: 0.3rem;
+}
 #banca {
   background-color: var(--color-mesa);
   min-height: var(--height-mesa);
