@@ -18,6 +18,7 @@ import {
   recogerCartas,
   hayJugadores,
   sigueJugandoBanca,
+  puedesSeguirJugando,
 } from "./Juego/juego";
 import { validarNuevoJugador, crearJugador } from "./Juego/gestionJugadores";
 
@@ -74,10 +75,10 @@ const pedirOtraCartaBanca = (banca) => {
   let carta = baraja.takeCard();
   banca.addCard(carta);
   repintarMesaBanca(banca, pedirOtraCartaBanca, plantarseBanca);
-
-  if (banca.getTotalPoints() >= 7.5) {
+  if (!puedesSeguirJugando(banca)) {
     banca.setStopGame(true);
-    finalizarJuego();
+    let resultados = finalizarJuego();
+    pintarResultados(resultados, jugadorBanca);
   }
 };
 
@@ -90,7 +91,7 @@ const pedirOtraCarta = (jugador) => {
   let carta = baraja.takeCard();
   jugador.addCard(carta);
 
-  if (jugador.getTotalPoints() > 7.5) {
+  if (!puedesSeguirJugando(jugador)) {
     pasarTurno(jugador);
   } else {
     repintarMesaJugador(jugador, pedirOtraCarta, plantarse);

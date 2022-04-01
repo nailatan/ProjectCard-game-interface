@@ -105,3 +105,7 @@ export const sigueJugandoBanca = () => {
   }
   return sigoJugando;
 };
+
+export const puedesSeguirJugando = (jugador) => {
+  return jugador.getTotalPoints() <= 7.5;
+};
