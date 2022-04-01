@@ -121,9 +121,7 @@ const empezarJuego = (reiniciar = false) => {
 
 const onClickJugar = () => {
   let msg = "";
-  if (jugadores.length < 1) {
-    alert(`Faltan jugadores ${jugadores.length}`);
-  } else if ((msg = validarInicioJuego()) != "") {
+  if ((msg = validarInicioJuego()) != "") {
     alert(`${msg}`);
   } else {
     empezarJuego();

@@ -77,7 +77,9 @@ const existeJugadorBanca = () => {
 };
 
 export const validarInicioJuego = () => {
-  if (existeJugadorBanca(jugadores) && jugadores.length < 2) {
+  if (jugadores.length < 1) {
+    alert(`Faltan jugadores. Hay ${jugadores.length}`);
+  } else if (existeJugadorBanca(jugadores) && jugadores.length < 2) {
     return "Falta al menos un jugador";
   } else if (!existeJugadorBanca(jugadores) && jugadores.length < 1) {
     return "Falta";
@@ -92,10 +94,13 @@ export const prepararBaraja = () => {
 };
 
 export const hayJugadores = () => {
-  return jugadores.length > 1;
+  return jugadores.length >= 1;
 };
 
 export const sigueJugandoBanca = () => {
+  //Faltaria añadir logica:
+  // - Si todos los jugadores se han pasado -> Puede plantarse.
+  // - Si los jugadores que no se han pasado, tienen menos puntos --> Puede plantarse, no hace falta arriesgar más
   let sigoJugando = false;
   if (
     jugadorBanca.getTotalPoints() < 7.5 &&
