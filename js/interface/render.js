@@ -324,3 +324,32 @@ export const pintarResultados = (resultados, jugadorBanca) => {
   let divSeguimiento = document.getElementById("seguimiento");
   divSeguimiento.textContent = "";
 };
+
+export const getNombreJugador = () =>
+  document.querySelector("input[name='nombre']").value;
+
+export const getColorJugador = () =>
+  document.querySelector("input[name='color']").value;
+
+export const getIsBanca = () =>
+  document.querySelector("input[name='banca']").checked;
+
+export const resetDatosJugador = () => {
+  let nombre = document.querySelector("input[name='nombre']");
+  let isBanca = document.querySelector("input[name='banca']");
+  let color = document.querySelector("input[name='color']");
+
+  nombre.value = "";
+  isBanca.checked = false;
+  color.value = generarNuevoColor();
+};
+
+const generarNuevoColor = () => {
+  let simbolos = "0123456789ABCDEF";
+  let color = "#";
+
+  for (let i = 0; i < 6; i++) {
+    color = color + simbolos[Math.floor(Math.random() * 16)];
+  }
+  return color;
+};

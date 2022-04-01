@@ -1,7 +1,5 @@
 import "../css/style.css";
 
-import Player from "./Player/player";
-import DeckCards from "./DeckCards/DeckCards";
 import {
   pintarJugadores,
   pintarMesa,
@@ -12,74 +10,24 @@ import {
   activarEntradaJugadores,
 } from "./interface/render";
 import {
-  resultado,
-  compararResultados,
   validarInicioJuego,
-  existeJugadorBanca,
+  reiniciarJuego,
+  prepararJugadores,
+  finalizarJuego,
+  prepararBaraja,
+  recogerCartas,
 } from "./Juego/juego";
+import { validarNuevoJugador, crearJugador } from "./Juego/gestionJugadores";
 
 // MODELO
-let jugadores = [];
-const colorBanca = "#000000";
-let jugadorBanca = new Player("Banca", colorBanca, true, true);
-let baraja;
+import { jugadores, jugadorBanca, baraja } from "./Juego/juego";
 
 // Funciones gestión de creación/Eliminación de jugadores
 const onClickAnyadirJugador = () => {
-  if (jugadores.length >= 4) {
-    alert("Se han alcanzado el máximo de jugadores");
-  } else if (nombreVacio()) {
-    alert("Falta el nombre del jugador");
-  } else if (jugadorDuplicado()) {
-    alert("Existe otro jugador con el mismo nombre");
-  } else if (colorDuplicado()) {
-    alert("Existe otro jugador con el mismo color");
-  } else {
+  if (validarNuevoJugador()) {
     crearJugador();
     pintarJugadores(jugadores);
   }
-};
-
-const colorDuplicado = () => {
-  const colorActual = document.querySelector("input[name='color']").value;
-  return jugadores.some((jugador) => jugador.getColour() === colorActual);
-};
-
-const jugadorDuplicado = () => {
-  const nombre = document.querySelector("input[name='nombre']").value;
-  return jugadores.some((jugador) => jugador.getPlayer() === nombre);
-};
-
-const nombreVacio = () => {
-  let nombre = document.querySelector("input[name='nombre']");
-  return nombre.value === "";
-};
-
-const generarNuevoColor = () => {
-  let simbolos = "0123456789ABCDEF";
-  let color = "#";
-
-  for (let i = 0; i < 6; i++) {
-    color = color + simbolos[Math.floor(Math.random() * 16)];
-  }
-  return color;
-};
-
-const crearJugador = () => {
-  let nombre = document.querySelector("input[name='nombre']");
-  let color = document.querySelector("input[name='color']");
-  let isBanca = document.querySelector("input[name='banca']");
-
-  let jugador = new Player(nombre.value, color.value, isBanca.checked, false);
-  jugadores.push(jugador);
-  nombre.value = "";
-  isBanca.checked = false;
-  color.value = generarNuevoColor();
-};
-
-const finalizarJuego = () => {
-  let resultados = compararResultados(jugadores, jugadorBanca);
-  pintarResultados(resultados, jugadorBanca);
 };
 
 const jugadaBanca = () => {
@@ -95,7 +43,8 @@ const jugadaBanca = () => {
       setTimeout(jugadaBanca, 2 * 1000);
     } else {
       repintarMesaBanca(jugadorBanca, pedirOtraCartaBanca, plantarseBanca);
-      finalizarJuego();
+      let resultados = finalizarJuego();
+      pintarResultados(resultados);
     }
   } else {
     jugadorBanca.setGameTurn(true);
@@ -156,21 +105,10 @@ const plantarse = (jugador) => {
 
 const empezarJuego = (reiniciar = false) => {
   if (!reiniciar) {
-    if (existeJugadorBanca(jugadores)) {
-      jugadorBanca = jugadores.find((jugador) => jugador.isTheBank());
-      let jugadores2 = jugadores.filter(
-        (jugador) => jugador.isTheBank() === false
-      );
-      jugadores.splice(0, jugadores.length, ...jugadores2);
-    } else {
-      jugadorBanca = new Player("Banca", colorBanca, true, true);
-    }
+    prepararJugadores();
   }
   pintarMesa(jugadores, jugadorBanca);
-  baraja = new DeckCards();
-  baraja.inicializateDeck();
-  baraja.suffleCards();
-
+  prepararBaraja();
   //Repartimos una carta a cada jugador
   jugadores.forEach((jugador, indice) => {
     jugador.setGameTurn(indice === 0); //El primer jugador tiene el turno
@@ -185,7 +123,7 @@ const onClickJugar = () => {
   let msg = "";
   if (jugadores.length < 1) {
     alert(`Faltan jugadores ${jugadores.length}`);
-  } else if ((msg = validarInicioJuego(jugadores)) != "") {
+  } else if ((msg = validarInicioJuego()) != "") {
     alert(`${msg}`);
   } else {
     empezarJuego();
@@ -193,15 +131,11 @@ const onClickJugar = () => {
 };
 
 const onClickReiniciar = () => {
-  jugadores.map((jugador) => {
-    jugador.vaciarMano();
-  });
-  jugadorBanca.vaciarMano();
+  recogerCartas();
   empezarJuego(true);
 };
 const onClickNuevoJuego = () => {
-  jugadores = [];
-  jugadorBanca = new Player("Banca", colorBanca, true, true);
+  reiniciarJuego();
   activarEntradaJugadores();
   pintarJugadores(jugadores);
 };

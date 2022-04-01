@@ -1,3 +1,11 @@
+import Player from "../Player/player";
+import DeckCards from "../DeckCards/DeckCards";
+
+const colorBanca = "#000000";
+export let jugadores = [];
+export let jugadorBanca = new Player("Banca", colorBanca, true, true);
+export let baraja;
+
 export class resultado {
   constructor(nombre, puntos, resultado) {
     this.jugador = nombre;
@@ -6,7 +14,36 @@ export class resultado {
   }
 }
 
-export const compararResultados = (jugadores, jugadorBanca) => {
+export const recogerCartas = () => {
+  jugadores.map((jugador) => {
+    jugador.vaciarMano();
+  });
+  jugadorBanca.vaciarMano();
+};
+
+export const reiniciarJuego = () => {
+  jugadores = [];
+  jugadorBanca = new Player("Banca", colorBanca, true, true);
+  prepararBaraja();
+};
+
+export const prepararJugadores = () => {
+  if (existeJugadorBanca(jugadores)) {
+    jugadorBanca = jugadores.find((jugador) => jugador.isTheBank());
+    let jugadores2 = jugadores.filter(
+      (jugador) => jugador.isTheBank() === false
+    );
+    jugadores.splice(0, jugadores.length, ...jugadores2);
+  } else {
+    jugadorBanca = new Player("Banca", colorBanca, true, true);
+  }
+};
+
+export const finalizarJuego = () => {
+  return compararResultados();
+};
+
+const compararResultados = () => {
   const puntosBanca = jugadorBanca.getTotalPoints();
   let resultados = [];
 
@@ -35,15 +72,21 @@ export const compararResultados = (jugadores, jugadorBanca) => {
   return resultados;
 };
 
-export const existeJugadorBanca = (jugadores) => {
+const existeJugadorBanca = () => {
   return jugadores.some((jugador) => jugador.isTheBank() === true);
 };
 
-export const validarInicioJuego = (jugadores) => {
+export const validarInicioJuego = () => {
   if (existeJugadorBanca(jugadores) && jugadores.length < 2) {
     return "Falta al menos un jugador";
   } else if (!existeJugadorBanca(jugadores) && jugadores.length < 1) {
     return "Falta";
   }
   return "";
+};
+
+export const prepararBaraja = () => {
+  baraja = new DeckCards();
+  baraja.inicializateDeck();
+  baraja.suffleCards();
 };
