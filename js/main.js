@@ -16,6 +16,7 @@ import {
   finalizarJuego,
   prepararBaraja,
   recogerCartas,
+  hayJugadores,
 } from "./Juego/juego";
 import { validarNuevoJugador, crearJugador } from "./Juego/gestionJugadores";
 
@@ -131,8 +132,10 @@ const onClickJugar = () => {
 };
 
 const onClickReiniciar = () => {
-  recogerCartas();
-  empezarJuego(true);
+  if (hayJugadores()) {
+    recogerCartas();
+    empezarJuego(true);
+  }
 };
 const onClickNuevoJuego = () => {
   reiniciarJuego();

@@ -90,3 +90,7 @@ export const prepararBaraja = () => {
   baraja.inicializateDeck();
   baraja.suffleCards();
 };
+
+export const hayJugadores = () => {
+  return jugadores.length > 1;
+};
