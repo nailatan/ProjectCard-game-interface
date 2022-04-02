@@ -19,6 +19,9 @@ import {
   hayJugadores,
   sigueJugandoBanca,
   puedesSeguirJugando,
+  pasarTurno as gestionaPasarTurno,
+  darCarta,
+  repartirCartaATodos,
 } from "./Juego/juego";
 import { validarNuevoJugador, crearJugador } from "./Juego/gestionJugadores";
 
@@ -36,9 +39,9 @@ const onClickAnyadirJugador = () => {
 const jugadaBanca = () => {
   if (jugadorBanca.isBoot()) {
     jugadorBanca.setGameTurn(true);
-    jugadorBanca.addCard(baraja.takeCard());
+    darCarta(jugadorBanca);
     repintarMesaBanca(jugadorBanca, pedirOtraCartaBanca, plantarseBanca);
-    jugadorBanca.setGameTurn(false);
+
     if (sigueJugandoBanca()) {
       setTimeout(jugadaBanca, 2 * 1000);
     } else {
@@ -53,27 +56,18 @@ const jugadaBanca = () => {
 };
 
 const pasarTurno = (jugador) => {
-  jugadores.find((jugador, indice) => {
-    let turnoSiguiente;
-    if (jugador.getGameTurn()) {
-      jugador.setGameTurn(false);
-      if (++indice < jugadores.length) {
-        jugadores[indice].setGameTurn(true);
-        turnoSiguiente = jugadores[indice];
-        repintarMesa(jugadores, pedirOtraCarta, plantarse);
-      } else {
-        repintarMesa(jugadores, pedirOtraCarta, plantarse);
-        jugadaBanca();
-        return jugadorBanca;
-      }
-      return jugador;
-    }
-  });
+  let turnoSiguiente = gestionaPasarTurno(jugador);
+
+  if (turnoSiguiente.isTheBank()) {
+    repintarMesaBanca(jugadorBanca, pedirOtraCartaBanca, plantarseBanca);
+    jugadaBanca();
+  } else {
+    repintarMesa(jugadores, pedirOtraCarta, plantarse);
+  }
 };
 
 const pedirOtraCartaBanca = (banca) => {
-  let carta = baraja.takeCard();
-  banca.addCard(carta);
+  darCarta(banca);
   repintarMesaBanca(banca, pedirOtraCartaBanca, plantarseBanca);
   if (!puedesSeguirJugando(banca)) {
     banca.setStopGame(true);
@@ -88,9 +82,7 @@ const plantarseBanca = (banca) => {
 };
 
 const pedirOtraCarta = (jugador) => {
-  let carta = baraja.takeCard();
-  jugador.addCard(carta);
-
+  darCarta(jugador);
   if (!puedesSeguirJugando(jugador)) {
     pasarTurno(jugador);
   } else {
@@ -109,12 +101,8 @@ const empezarJuego = (reiniciar = false) => {
   }
   pintarMesa(jugadores, jugadorBanca);
   prepararBaraja();
-  //Repartimos una carta a cada jugador
-  jugadores.forEach((jugador, indice) => {
-    jugador.setGameTurn(indice === 0); //El primer jugador tiene el turno
-    jugador.addCard(baraja.takeCard());
-    repintarMesaJugador(jugador, pedirOtraCarta, plantarse);
-  });
+  repartirCartaATodos();
+  repintarMesa(jugadores, pedirOtraCarta, plantarse);
   jugadorBanca.addCard(baraja.takeCard());
   repintarMesaBanca(jugadorBanca, pedirOtraCartaBanca, plantarseBanca);
 };
@@ -135,7 +123,7 @@ const onClickReiniciar = () => {
   }
 };
 const onClickNuevoJuego = () => {
-  reiniciarJuego();
+  reiniciarJuego(false);
   activarEntradaJugadores();
   pintarJugadores(jugadores);
 };

@@ -114,3 +114,32 @@ export const sigueJugandoBanca = () => {
 export const puedesSeguirJugando = (jugador) => {
   return jugador.getTotalPoints() <= 7.5;
 };
+
+export const pasarTurno = (jugador) => {
+  let turnoSiguiente;
+  jugadores.find((jugador, indice) => {
+    if (jugador.getGameTurn()) {
+      jugador.setGameTurn(false);
+      if (++indice < jugadores.length) {
+        jugadores[indice].setGameTurn(true);
+        turnoSiguiente = jugadores[indice];
+      } else {
+        turnoSiguiente = jugadorBanca;
+      }
+      return turnoSiguiente;
+    }
+  });
+  return turnoSiguiente;
+};
+
+export const darCarta = (jugador) => {
+  let carta = baraja.takeCard();
+  jugador.addCard(carta);
+};
+
+export const repartirCartaATodos = () => {
+  jugadores.forEach((jugador, indice) => {
+    jugador.setGameTurn(indice === 0); //El primer jugador tiene el turno
+    jugador.addCard(baraja.takeCard());
+  });
+};
