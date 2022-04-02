@@ -22,6 +22,7 @@ import {
   pasarTurno as gestionaPasarTurno,
   darCarta,
   repartirCartaATodos,
+  reiniciarJugadores,
 } from "./Juego/juego";
 import { validarNuevoJugador, crearJugador } from "./Juego/gestionJugadores";
 
@@ -77,14 +78,17 @@ const pedirOtraCartaBanca = (banca) => {
 };
 
 const plantarseBanca = (banca) => {
+  console.log("La banca se planaçta");
   banca.setStopGame(true);
-  finalizarJuego();
+  let resultados = finalizarJuego();
+  pintarResultados(resultados, jugadorBanca);
 };
 
 const pedirOtraCarta = (jugador) => {
   darCarta(jugador);
   if (!puedesSeguirJugando(jugador)) {
     pasarTurno(jugador);
+    repintarMesaJugador(jugador);
   } else {
     repintarMesaJugador(jugador, pedirOtraCarta, plantarse);
   }
@@ -96,9 +100,9 @@ const plantarse = (jugador) => {
 };
 
 const empezarJuego = (reiniciar = false) => {
-  if (!reiniciar) {
-    prepararJugadores();
-  }
+  if (!reiniciar) prepararJugadores();
+  else reiniciarJugadores();
+
   pintarMesa(jugadores, jugadorBanca);
   prepararBaraja();
   repartirCartaATodos();

@@ -55,45 +55,16 @@ const existeJugadorBanca = (jugadores) => {
 const revisarCheckBanca = (jugadores) => {
   let checkBanca = document.querySelector("input[name='banca']");
   let hayJugadorBanca = existeJugadorBanca(jugadores);
-  if (!hayJugadorBanca && jugadores.length === 3) checkBanca.checked = true; //Obligamos a que si introducimos un cuarto jugador sea la banca
+
+  //Obligamos a que si introducimos un cuarto jugador sea la banca
+  if (!hayJugadorBanca && jugadores.length === 3) checkBanca.checked = true;
   checkBanca.disabled = hayJugadorBanca;
 };
 
-const pintarMesaBanca = (jugador) => {
-  let divMesaJugador = document.createElement("div");
-  divMesaJugador.classList.add("mesaBanca", "FColumn");
-  divMesaJugador.id = `jugador_${jugador.getPlayer()}`;
-
-  let divNombreJugador = document.createElement("div");
-  divNombreJugador.classList.add("FRow", "jCenter");
-
-  let h2NombreJugador = document.createElement("h2");
-  h2NombreJugador.textContent = jugador.getPlayer();
-  h2NombreJugador.setAttribute("style", `color: ${jugador.getColour()}`);
-
-  let divCartasJugador = document.createElement("div");
-  divCartasJugador.classList.add("fColumn", "flexAll");
-
-  let divCartas = document.createElement("div");
-  divCartas.id = `cartas_${jugador.getPlayer()}`;
-
-  let divOpciones = document.createElement("div");
-  divOpciones.classList.add("FRow", "jStart", "opciones");
-  divOpciones.id = `opciones_${jugador.getPlayer()}`;
-  divNombreJugador.appendChild(h2NombreJugador);
-
-  divCartasJugador.appendChild(divOpciones);
-  divCartasJugador.appendChild(divCartas);
-
-  divMesaJugador.appendChild(divNombreJugador);
-  divMesaJugador.appendChild(divCartasJugador);
-
-  return divMesaJugador;
-};
-
 const pintarMesaJugador = (jugador) => {
+  let tipoMesa = jugador.isTheBank() ? "mesaBanca" : "mesaJugador";
   let divMesaJugador = document.createElement("div");
-  divMesaJugador.classList.add("mesaJugador", "FColumn");
+  divMesaJugador.classList.add(tipoMesa, "FColumn");
   divMesaJugador.id = `jugador_${jugador.getPlayer()}`;
   divMesaJugador.setAttribute(
     "style",
@@ -139,7 +110,7 @@ export const pintarMesa = (jugadores, banca) => {
     divJugadores.appendChild(pintarMesaJugador(jugador))
   );
   divBanca.textContent = "";
-  divBanca.appendChild(pintarMesaBanca(banca));
+  divBanca.appendChild(pintarMesaJugador(banca));
 };
 
 export const repintarMesa = (
@@ -312,13 +283,13 @@ export const pintarResultados = (resultados, jugadorBanca) => {
     divOpciones.style.color = resultado.resultado === "G" ? "blue" : "red";
     divOpciones.style.fontSize = "2rem";
     divOpciones.textContent = "";
-    divOpciones.textContent = traducirResultado(resultado.resultado);
+    divOpciones.textContent = `${traducirResultado(resultado.resultado)}`;
   });
 
   let divopcionesBanca = document.getElementById(
     `opciones_${jugadorBanca.getPlayer()}`
   );
-  divopcionesBanca.textContent = "";
+  divopcionesBanca.textContent = `Tu total de puntos han sido ${jugadorBanca.getTotalPoints()}`;
 
   let divSeguimiento = document.getElementById("seguimiento");
   divSeguimiento.textContent = "";

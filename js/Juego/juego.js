@@ -36,7 +36,21 @@ export const prepararJugadores = () => {
     jugadores.splice(0, jugadores.length, ...jugadores2);
   } else {
     jugadorBanca = new Player("Banca", colorBanca, true, true);
+    jugadorBanca.setGameTurn(false);
   }
+  jugadores.map((jugador) => {
+    jugador.setGameTurn(false);
+    jugador.setStopGame(true);
+  });
+};
+
+export const reiniciarJugadores = () => {
+  jugadorBanca.setGameTurn(false);
+  jugadorBanca.setStopGame(true);
+  jugadores.map((jugador) => {
+    jugador.setGameTurn(false);
+    jugador.setStopGame(true);
+  });
 };
 
 export const finalizarJuego = () => {
