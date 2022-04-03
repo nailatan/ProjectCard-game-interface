@@ -40,16 +40,16 @@ export const prepararJugadores = () => {
   }
   jugadores.map((jugador) => {
     jugador.setGameTurn(false);
-    jugador.setStopGame(true);
+    jugador.setStopGame(false);
   });
 };
 
 export const reiniciarJugadores = () => {
   jugadorBanca.setGameTurn(false);
-  jugadorBanca.setStopGame(true);
+  jugadorBanca.setStopGame(false);
   jugadores.map((jugador) => {
     jugador.setGameTurn(false);
-    jugador.setStopGame(true);
+    jugador.setStopGame(false);
   });
 };
 

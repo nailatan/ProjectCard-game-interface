@@ -127,10 +127,6 @@ tbody td:last-child {
   margin-right: 0.3rem;
 }
 
-#jugadores {
-  padding-top: 2rem;
-}
-
 .mesaBanca {
   min-height: var(--height-mesa);
   min-width: 40rem;
@@ -167,5 +163,6 @@ main button {
 }
 
 #seguimiento {
-  margin-top: 0.9rem;
+  margin-top: 0.3rem;
+  font-size: 1.2rem;
 }

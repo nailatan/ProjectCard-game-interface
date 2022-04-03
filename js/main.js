@@ -9,6 +9,7 @@ import {
   pintarResultados,
   activarEntradaJugadores,
 } from "./interface/render";
+
 import {
   validarInicioJuego,
   reiniciarJuego,
@@ -24,6 +25,7 @@ import {
   repartirCartaATodos,
   reiniciarJugadores,
 } from "./Juego/juego";
+
 import { validarNuevoJugador, crearJugador } from "./Juego/gestionJugadores";
 
 // MODELO
@@ -78,7 +80,6 @@ const pedirOtraCartaBanca = (banca) => {
 };
 
 const plantarseBanca = (banca) => {
-  console.log("La banca se planaçta");
   banca.setStopGame(true);
   let resultados = finalizarJuego();
   pintarResultados(resultados, jugadorBanca);
@@ -88,7 +89,7 @@ const pedirOtraCarta = (jugador) => {
   darCarta(jugador);
   if (!puedesSeguirJugando(jugador)) {
     pasarTurno(jugador);
-    repintarMesaJugador(jugador);
+    repintarMesaJugador(jugador, pedirOtraCarta, plantarse);
   } else {
     repintarMesaJugador(jugador, pedirOtraCarta, plantarse);
   }
@@ -96,6 +97,7 @@ const pedirOtraCarta = (jugador) => {
 
 const plantarse = (jugador) => {
   jugador.setStopGame(true);
+  repintarMesaJugador(jugador);
   pasarTurno(jugador);
 };
 
