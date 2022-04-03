@@ -122,21 +122,23 @@ tbody td:last-child {
 
 #nuevoJugador label {
   display: inline-flex;
-  /* text-align: center; */
   align-items: center;
   margin-left: 0.3rem;
   margin-right: 0.3rem;
 }
-#banca {
-  background-color: var(--color-mesa);
-  min-height: var(--height-mesa);
-  min-width: 40rem;
-  border: 1px solid white;
-  border-radius: var(--border-radius-mesa);
-  padding: 0.4rem;
-}
+
 #jugadores {
   padding-top: 2rem;
+}
+
+.mesaBanca {
+  min-height: var(--height-mesa);
+  min-width: 40rem;
+  margin: 1rem;
+  border: 1px solid white;
+  border-radius: var(--border-radius-mesa);
+  background-color: var(--color-mesa);
+  padding: 0.4rem;
 }
 .mesaJugador {
   min-height: var(--height-mesa);
