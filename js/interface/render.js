@@ -138,43 +138,6 @@ export const repintarMesaBanca = (
   functionPlantarse
 ) => {
   repintarMesaJugador(banca, functionPedirCarta, functionPlantarse);
-  // const divMesa = document.getElementById(`jugador_${banca.getPlayer()}`);
-  // const divCartas = divMesa.querySelector(`#cartas_${banca.getPlayer()}`);
-  // divCartas.textContent = "";
-
-  // for (let carta of banca.getHand()) {
-  //   let imagenCarta = document.createElement("img");
-  //   imagenCarta.src = `./Images/Cards/${carta.getNumber()}${carta.getSuit()}.jpg`;
-  //   divCartas.appendChild(imagenCarta);
-  // }
-
-  // let divOpciones = divMesa.querySelector(`#opciones_${banca.getPlayer()}`);
-  // divOpciones.textContent = "";
-
-  // let divPuntuacion = divMesa.querySelector(`#puntuacion_${banca.getPlayer()}`);
-  // divPuntuacion.textContent = `Puntos: ${banca.getTotalPoints()}`;
-
-  // if (!banca.isBoot() && banca.getGameTurn()) {
-  //   //Banca NO automatica
-  //   let buttonCarta = document.createElement("button");
-  //   buttonCarta.innerText = "Carta";
-
-  //   buttonCarta.addEventListener("click", () => {
-  //     functionPedirCarta(banca);
-  //   });
-  //   let buttonPlantar = document.createElement("button");
-  //   buttonPlantar.innerText = "Me planto";
-  //   buttonPlantar.addEventListener("click", () => {
-  //     functionPlantarse(banca);
-  //   });
-
-  //   divOpciones.appendChild(buttonCarta);
-  //   divOpciones.appendChild(buttonPlantar);
-  // }
-
-  // if (banca.getGameTurn()) {
-  //   actualizarSeguimientoTurno(banca);
-  // }
 };
 
 const actualizarSeguimientoTurno = (jugador) => {
@@ -184,57 +147,6 @@ const actualizarSeguimientoTurno = (jugador) => {
   let divSeguimiento = document.getElementById("seguimiento");
   divSeguimiento.textContent = texto;
 };
-
-// export const repintarMesaJugador2 = (
-//   jugador,
-//   functionPedirCarta,
-//   functionPlantarse
-// ) => {
-//   const divMesa = document.getElementById(`jugador_${jugador.getPlayer()}`);
-//   const divCartas = divMesa.querySelector(`#cartas_${jugador.getPlayer()}`);
-//   divCartas.textContent = "";
-
-//   for (let carta of jugador.getHand()) {
-//     let imagenCarta = document.createElement("img");
-//     imagenCarta.src = `./Images/Cards/${carta.getNumber()}${carta.getSuit()}.jpg`;
-//     divCartas.appendChild(imagenCarta);
-//   }
-
-//   let divOpciones = divMesa.querySelector(`#opciones_${jugador.getPlayer()}`);
-//   divOpciones.textContent = "";
-
-//   let divPuntuacion = divMesa.querySelector(
-//     `#puntuacion_${jugador.getPlayer()}`
-//   );
-//   divPuntuacion.textContent = `Puntos: ${jugador.getTotalPoints()}`;
-
-//   //Activamos acciones de juego si es el turno del jugador
-//   if (jugador.getGameTurn()) {
-//     actualizarSeguimientoTurno(jugador);
-//     let buttonCarta = document.createElement("button");
-//     buttonCarta.innerText = "Carta";
-
-//     buttonCarta.addEventListener("click", () => {
-//       functionPedirCarta(jugador);
-//     });
-//     let buttonPlantar = document.createElement("button");
-//     buttonPlantar.innerText = "Me planto";
-//     buttonPlantar.addEventListener("click", () => {
-//       functionPlantarse(jugador);
-//     });
-
-//     divOpciones.appendChild(buttonCarta);
-//     divOpciones.appendChild(buttonPlantar);
-//   } else if (jugador.getTotalPoints() > 7.5) {
-//     let divResultado = document.createElement("div");
-//     divResultado.textContent = "Te has pasado";
-//     divOpciones.appendChild(divResultado);
-//   } else if (jugador.getStopGame()) {
-//     let divResultado = document.createElement("div");
-//     divResultado.textContent = "Te has plantado";
-//     divOpciones.appendChild(divResultado);
-//   }
-// };
 
 export const repintarMesaJugador = (
   jugador,
