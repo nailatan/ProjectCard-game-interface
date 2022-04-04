@@ -2,7 +2,7 @@ class Card {
   constructor(number, suit, image) {
     this._suit = suit;
     this._number = number;
-    this._isVisible = false;
+    this._isVisible = true;
     this._value = isNaN(number) ? 0.5 : number;
     this._image = image;
   }
