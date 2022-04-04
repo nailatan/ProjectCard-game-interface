@@ -2,10 +2,15 @@ import Card from "../Card/Card";
 import _ from "underscore";
 
 class DeckCards {
-  cardsNumber = [1, 2, 3, 4, 5, 6, 7, "Sota", "Caballo", "Rey"];
-  constructor() {
+  constructor(cardsNumber, suits) {
     this.cards = [];
-    this.suits = ["Bastos", "Oros", "Espadas", "Copas"];
+
+    this.cardsNumber =
+      cardsNumber != undefined
+        ? cardsNumber
+        : [1, 2, 3, 4, 5, 6, 7, "Sota", "Caballo", "Rey"];
+    this.suits =
+      suits != undefined ? suits : ["Bastos", "Oros", "Espadas", "Copas"];
   }
 
   inicializateDeck() {
@@ -27,6 +32,7 @@ class DeckCards {
     this.cards.map((value) => value.printWithWorthConsole());
   }
   takeCard() {
+    console.log(this.cards.length);
     return this.cards.shift();
   }
 }
