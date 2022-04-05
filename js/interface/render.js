@@ -1,5 +1,5 @@
 import Player from "../Player/player";
-import { resultado } from "../Juego/juego";
+import { puedesSeguirJugando, resultado } from "../Juego/juego";
 
 export const pintarJugadores = (jugadores) => {
   let tablaJugadores = document.querySelector("tbody");
@@ -125,19 +125,33 @@ export const pintarMesa = (jugadores, banca) => {
 export const repintarMesa = (
   jugadores,
   functionPedirCarta,
-  functionPlantarse
+  functionPlantarse,
+  functionGirarCarta
 ) => {
   jugadores.map((jugador) =>
-    repintarMesaJugador(jugador, functionPedirCarta, functionPlantarse)
+    repintarMesaJugador(
+      jugador,
+      functionPedirCarta,
+      functionPlantarse,
+      functionGirarCarta
+    )
   );
 };
 
 export const repintarMesaBanca = (
   banca,
   functionPedirCarta,
-  functionPlantarse
+  functionPlantarse,
+  functionGirarCarta,
+  mostrarTodas
 ) => {
-  repintarMesaJugador(banca, functionPedirCarta, functionPlantarse);
+  repintarMesaJugador(
+    banca,
+    functionPedirCarta,
+    functionPlantarse,
+    functionGirarCarta,
+    mostrarTodas
+  );
 };
 
 const actualizarSeguimientoTurno = (jugador) => {
@@ -148,20 +162,50 @@ const actualizarSeguimientoTurno = (jugador) => {
   divSeguimiento.textContent = texto;
 };
 
-export const repintarMesaJugador = (
-  jugador,
-  functionPedirCarta,
-  functionPlantarse
-) => {
+const pintarCartasJugador = (jugador, functionGirarCarta, mostrarTodas) => {
   const divMesa = document.getElementById(`jugador_${jugador.getPlayer()}`);
   const divCartas = divMesa.querySelector(`#cartas_${jugador.getPlayer()}`);
   divCartas.textContent = "";
 
-  for (let carta of jugador.getHand()) {
+  let manoCartas = jugador.getHand();
+  for (let i = 0; i < manoCartas.length; i++) {
+    let carta = manoCartas[i];
     let imagenCarta = document.createElement("img");
-    imagenCarta.src = `./Images/Cards/${carta.getNumber()}${carta.getSuit()}.jpg`;
+
+    if (
+      carta.isVisible() ||
+      jugador.getTotalPoints() > 7.5 ||
+      jugador.isTheBank() ||
+      mostrarTodas
+    ) {
+      imagenCarta.src = `./Images/Cards/${carta.getNumber()}${carta.getSuit()}.jpg`;
+    } else {
+      imagenCarta.src = `./Images/Cards/trasera.jpg`;
+    }
+    //Solo el jugador con el turno, puede girar su última carta
+    if (
+      jugador.getGameTurn() &&
+      functionGirarCarta != "" &&
+      functionGirarCarta != undefined &&
+      (i === manoCartas.length - 1 || !carta.isVisible())
+    ) {
+      imagenCarta.addEventListener("click", (event) => {
+        functionGirarCarta(jugador, carta);
+      });
+    }
     divCartas.appendChild(imagenCarta);
   }
+};
+export const repintarMesaJugador = (
+  jugador,
+  functionPedirCarta,
+  functionPlantarse,
+  functionGirarCarta,
+  mostrarTodas = false
+) => {
+  const divMesa = document.getElementById(`jugador_${jugador.getPlayer()}`);
+
+  pintarCartasJugador(jugador, functionGirarCarta, mostrarTodas);
 
   let divOpciones = divMesa.querySelector(`#opciones_${jugador.getPlayer()}`);
   divOpciones.textContent = "";
@@ -169,7 +213,11 @@ export const repintarMesaJugador = (
   let divPuntuacion = divMesa.querySelector(
     `#puntuacion_${jugador.getPlayer()}`
   );
-  divPuntuacion.textContent = `Puntos: ${jugador.getTotalPoints()}`;
+  if (mostrarTodas || !puedesSeguirJugando(jugador)) {
+    divPuntuacion.textContent = `Puntos: ${jugador.getTotalPoints()}`;
+  } else {
+    divPuntuacion.textContent = `Puntos: ${jugador.getTotalPointsVisibleCards()}`;
+  }
 
   actualizarSeguimientoTurno(jugador);
 
@@ -269,7 +317,9 @@ const traducirResultado = (resultado) => {
   return texto;
 };
 
-export const pintarResultados = (resultados, jugadorBanca) => {
+export const pintarResultados = (resultados, jugadores, jugadorBanca) => {
+  jugadores.map((jugador) => repintarMesaJugador(jugador, "", "", "", true));
+  repintarMesaBanca(jugadorBanca, "", "", "", true);
   resultados.map((resultado) => {
     let divOpciones = document.getElementById(`opciones_${resultado.jugador}`);
     divOpciones.style.color = resultado.resultado === "G" ? "blue" : "red";
@@ -277,12 +327,6 @@ export const pintarResultados = (resultados, jugadorBanca) => {
     divOpciones.textContent = "";
     divOpciones.textContent = `${traducirResultado(resultado.resultado)}`;
   });
-
-  let divopcionesBanca = document.getElementById(
-    `opciones_${jugadorBanca.getPlayer()}`
-  );
-  divopcionesBanca.textContent = `Tu total de puntos han sido ${jugadorBanca.getTotalPoints()}`;
-
   actualizarSeguimientoTurno();
 };
 

@@ -146,8 +146,16 @@ export const pasarTurno = (jugador) => {
   return turnoSiguiente;
 };
 
+const tieneCartasBocaAbajo = (jugador) => {
+  let manoCartas = jugador.getHand();
+  return manoCartas.some((carta) => !carta.isVisible());
+};
+
 export const darCarta = (jugador) => {
   let carta = baraja.takeCard();
+
+  if (tieneCartasBocaAbajo(jugador)) carta.setVisibility(true);
+  else carta.setVisibility(false);
   jugador.addCard(carta);
 };
 
@@ -156,4 +164,13 @@ export const repartirCartaATodos = () => {
     jugador.setGameTurn(indice === 0); //El primer jugador tiene el turno
     jugador.addCard(baraja.takeCard());
   });
+};
+
+export const girarCarta = (jugador, carta) => {
+  let seraVisible = !carta.isVisible();
+  if (!seraVisible) {
+    //EL resto de cartas de la mano, tienen que ser visibles. Sólo puede haber una visible.
+    jugador.getHand().map((cartaMano) => cartaMano.setVisibility(true));
+  }
+  carta.setVisibility(!carta.isVisible());
 };

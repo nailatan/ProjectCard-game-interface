@@ -25,6 +25,10 @@ class Player {
   getTotalPoints() {
     return this._hand.getTotalPoints();
   }
+  getTotalPointsVisibleCards() {
+    return this._hand.getTotalPointsVisibleCards();
+  }
+
   printHandConsole() {
     this._hand.printHandConsole();
   }

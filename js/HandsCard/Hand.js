@@ -13,6 +13,15 @@ class Hand {
   getTotalPoints() {
     return this._totalPoints;
   }
+
+  getTotalPointsVisibleCards() {
+    return this._handOfCards.reduce((acum, carta) => {
+      let total = 0;
+      acum += carta.isVisible() ? carta.getValue() : 0;
+      return acum;
+    }, 0);
+  }
+
   someCardVisible() {
     return this.getHand().some((card) => card.isVisible());
   }
