@@ -196,6 +196,7 @@ const pintarCartasJugador = (jugador, functionGirarCarta, mostrarTodas) => {
     divCartas.appendChild(imagenCarta);
   }
 };
+
 export const repintarMesaJugador = (
   jugador,
   functionPedirCarta,
@@ -205,20 +206,22 @@ export const repintarMesaJugador = (
 ) => {
   const divMesa = document.getElementById(`jugador_${jugador.getPlayer()}`);
 
+  const actualizarPuntuacion = () => {
+    let divPuntuacion = divMesa.querySelector(
+      `#puntuacion_${jugador.getPlayer()}`
+    );
+    if (mostrarTodas || !puedesSeguirJugando(jugador)) {
+      divPuntuacion.textContent = `Puntos: ${jugador.getTotalPoints()}`;
+    } else {
+      divPuntuacion.textContent = `Puntos: ${jugador.getTotalPointsVisibleCards()}`;
+    }
+  };
   pintarCartasJugador(jugador, functionGirarCarta, mostrarTodas);
 
   let divOpciones = divMesa.querySelector(`#opciones_${jugador.getPlayer()}`);
   divOpciones.textContent = "";
 
-  let divPuntuacion = divMesa.querySelector(
-    `#puntuacion_${jugador.getPlayer()}`
-  );
-  if (mostrarTodas || !puedesSeguirJugando(jugador)) {
-    divPuntuacion.textContent = `Puntos: ${jugador.getTotalPoints()}`;
-  } else {
-    divPuntuacion.textContent = `Puntos: ${jugador.getTotalPointsVisibleCards()}`;
-  }
-
+  actualizarPuntuacion(jugador);
   actualizarSeguimientoTurno(jugador);
 
   //Activamos acciones de juego si es el turno del jugador
