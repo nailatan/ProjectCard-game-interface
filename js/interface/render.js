@@ -68,7 +68,7 @@ const pintarMesaJugador = (jugador) => {
   divMesaJugador.id = `jugador_${jugador.getPlayer()}`;
   divMesaJugador.setAttribute(
     "style",
-    `border: 3px solid ${jugador.getColour()}`
+    `border: 4px solid ${jugador.getColour()}`
   );
 
   let divNombreJugador = document.createElement("div");
@@ -142,15 +142,14 @@ export const repintarMesaBanca = (
   banca,
   functionPedirCarta,
   functionPlantarse,
-  functionGirarCarta,
-  mostrarTodas
+  functionGirarCarta
 ) => {
   repintarMesaJugador(
     banca,
     functionPedirCarta,
     functionPlantarse,
     functionGirarCarta,
-    mostrarTodas
+    true
   );
 };
 
