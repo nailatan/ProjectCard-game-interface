@@ -56,7 +56,7 @@ header div {
 header button {
   margin-top: 1rem;
   margin-right: 1rem;
-  border: 2px solid #fff;
+  border: var(--border-button);
   background-color: transparent;
   color: #fff;
   border-radius: var(--border-radius-button);
@@ -77,6 +77,7 @@ body {
   --border-radius-mesa: 1rem;
   --height-mesa: 35vh;
   --border-radius-button: 1rem;
+  --border-button: 2px solid #fff;
 }
 table {
   margin-top: 1rem;
@@ -91,10 +92,10 @@ input[type="text"] {
 }
 
 #Jugar {
-  background-color: #aaa;
+  background-color: transparent;
   color: #fff;
-  border-radius: 10rem;
-  width: fit-content;
+  border-radius: var(--border-radius-button);
+  border: var(--border-button);
   position: absolute;
   padding: 0.5em;
   bottom: 0;
@@ -159,7 +160,7 @@ main button {
   border-radius: var(--border-radius-button);
   color: #fff;
   background: transparent;
-  border: 2px solid #fff;
+  border: var(--border-button);
   margin-right: 0.4rem;
 }
 

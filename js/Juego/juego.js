@@ -92,9 +92,9 @@ const existeJugadorBanca = () => {
 
 export const validarInicioJuego = () => {
   if (jugadores.length < 1) {
-    alert(`Faltan jugadores. Hay ${jugadores.length}`);
+    return `Faltan jugadores. Hay ${jugadores.length}`;
   } else if (existeJugadorBanca(jugadores) && jugadores.length < 2) {
-    return "Falta al menos un jugador";
+    return "Falta al menos un jugador.";
   } else if (!existeJugadorBanca(jugadores) && jugadores.length < 1) {
     return "Falta";
   }
