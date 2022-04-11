@@ -32,7 +32,6 @@ import { validarNuevoJugador, crearJugador } from "./Juego/gestionJugadores";
 // MODELO
 import { jugadores, jugadorBanca, baraja } from "./Juego/juego";
 
-// Funciones gestión de creación/Eliminación de jugadores
 const onClickAnyadirJugador = () => {
   if (validarNuevoJugador()) {
     crearJugador();
