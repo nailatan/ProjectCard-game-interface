@@ -61,11 +61,13 @@ header button {
   color: #fff;
   border-radius: var(--border-radius-button);
   height: 2rem;
+  cursor: pointer;
 }
 
 header h1 {
   text-align: right;
   flex: 0.6;
+  text-shadow: 3px 3px 10px #eee;
 }
 
 body {
@@ -101,6 +103,7 @@ input[type="text"] {
   bottom: 0;
   right: 0;
   margin: 0.4em;
+  cursor: pointer;
 }
 
 th,
@@ -152,6 +155,11 @@ img[src^="./Images/Cards/"] {
   width: 6rem;
 }
 
+img[src="../images/plus.svg"],
+img[src="./images/delete.svg"] {
+  cursor: pointer;
+}
+
 .opciones {
   padding: 0.3rem;
 }
@@ -162,6 +170,7 @@ main button {
   background: transparent;
   border: var(--border-button);
   margin-right: 0.4rem;
+  cursor: pointer;
 }
 
 #seguimiento {

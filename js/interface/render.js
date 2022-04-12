@@ -18,7 +18,11 @@ export const pintarJugadores = (jugadores) => {
     celdaColorJugador.style.backgroundColor = celdaColorJugador.innerText;
     celdaColorJugador.style.color = celdaColorJugador.innerText;
     celdaColorJugador.style.margin = ".4rem";
-    celdaBancaJugador.innerText = jugador.isTheBank() ? "SI" : "";
+    celdaBancaJugador.innerText = "";
+    if (jugador.isTheBank()) {
+      celdaBancaJugador.innerText = "SI";
+      celdaBancaJugador.setAttribute("title", "Juega como banquero");
+    }
     filaJugador.appendChild(celdaOrdenJugador);
     filaJugador.appendChild(celdaNombreJugador);
     filaJugador.appendChild(celdaColorJugador);
@@ -30,6 +34,7 @@ export const pintarJugadores = (jugadores) => {
   const crearImagenBorrarJugador = (jugador) => {
     let img = document.createElement("img");
     img.setAttribute("src", "./images/delete.svg");
+    img.setAttribute("title", `Eliminar el jugador ${jugador}`);
     img.addEventListener("click", function (event) {
       onClickEliminarJugador(jugador, jugadores);
     });
