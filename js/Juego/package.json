@@ -1,6 +1,7 @@
 {
   "name": "juego",
   "version": "1.0.0",
+  "type": "module",
   "description": "Funcionalidad del juego del 7 y medio. Incluye funcionalidad para creación de jugadores.",
   "main": "juego.js",
   "scripts": {

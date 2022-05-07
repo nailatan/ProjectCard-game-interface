@@ -1,6 +1,7 @@
 {
   "name": "deckcards",
   "version": "1.0.0",
+  "type": "module",
   "description": "Implementa una baraja de cartas",
   "main": "DeckCards.js",
   "scripts": {
